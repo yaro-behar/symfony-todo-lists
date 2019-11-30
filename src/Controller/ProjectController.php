@@ -12,6 +12,6 @@ class ProjectController extends AbstractController
      */
     public function index()
     {
-        echo 'Hello, World!'; die;
+        return $this->render('product/index.html.twig');
     }
 }
