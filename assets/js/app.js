@@ -5,7 +5,7 @@
  * (and its CSS file) in your base layout (base.html.twig).
  */
 
-require('bootstrap');
 require('../css/app.css');
 
 const $ = require('jquery');
+require('bootstrap');
