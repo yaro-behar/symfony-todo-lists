@@ -1,80 +1,113 @@
--- MySQL dump 10.13  Distrib 5.7.27, for Linux (x86_64)
+-- phpMyAdmin SQL Dump
+-- version 4.9.2
+-- https://www.phpmyadmin.net/
 --
--- Host: localhost    Database: ruby_garage
--- ------------------------------------------------------
--- Server version	5.7.27-0ubuntu0.18.04.1
+-- Хост: 127.0.0.1:3308
+-- Время создания: Дек 01 2019 г., 12:49
+-- Версия сервера: 5.7.28
+-- Версия PHP: 7.3.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- Table structure for table `project`
+-- База данных: `ruby-garage`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `migration_versions`
+--
+
+DROP TABLE IF EXISTS `migration_versions`;
+CREATE TABLE IF NOT EXISTS `migration_versions` (
+  `version` varchar(14) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `executed_at` datetime NOT NULL COMMENT '(DC2Type:datetime_immutable)',
+  PRIMARY KEY (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `migration_versions`
+--
+
+INSERT INTO `migration_versions` (`version`, `executed_at`) VALUES
+('20191201124603', '2019-12-01 12:46:13');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `project`
 --
 
 DROP TABLE IF EXISTS `project`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `project` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `user_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE IF NOT EXISTS `project` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_2FB3D0EEA76ED395` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `project`
---
-
-LOCK TABLES `project` WRITE;
-/*!40000 ALTER TABLE `project` DISABLE KEYS */;
-/*!40000 ALTER TABLE `project` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `task`
+-- Структура таблицы `task`
 --
 
 DROP TABLE IF EXISTS `task`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `task` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `is_active` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '0 - not active, 1 - active',
+CREATE TABLE IF NOT EXISTS `task` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `project_id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_active` smallint(5) UNSIGNED NOT NULL DEFAULT '0',
   `deadline` datetime DEFAULT NULL,
-  `priority` smallint(5) unsigned DEFAULT NULL,
-  `project_id` int(10) unsigned NOT NULL,
+  `priority` smallint(5) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_task_1_idx` (`project_id`),
-  CONSTRAINT `fk_task_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  KEY `IDX_527EDB25166D1F9C` (`project_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `task`
+-- Структура таблицы `user`
 --
 
-LOCK TABLES `task` WRITE;
-/*!40000 ALTER TABLE `task` DISABLE KEYS */;
-/*!40000 ALTER TABLE `task` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `email` varchar(180) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `roles` json NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_8D93D649E7927C74` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+--
+-- Ограничения внешнего ключа сохраненных таблиц
+--
+
+--
+-- Ограничения внешнего ключа таблицы `project`
+--
+ALTER TABLE `project`
+  ADD CONSTRAINT `FK_2FB3D0EEA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `task`
+--
+ALTER TABLE `task`
+  ADD CONSTRAINT `FK_527EDB25166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2019-11-29 13:04:03
