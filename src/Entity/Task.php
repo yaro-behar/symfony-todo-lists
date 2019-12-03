@@ -9,6 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Task
 {
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_INACTIVE = 0;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -22,9 +25,9 @@ class Task
     private $name;
 
     /**
-     * @ORM\Column(type="smallint", nullable=false, options={"unsigned":true, "default":0})
+     * @ORM\Column(type="smallint", nullable=false, options={"unsigned":true, "default":1})
      */
-    private $is_active;
+    private $is_active = self::STATUS_ACTIVE;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
