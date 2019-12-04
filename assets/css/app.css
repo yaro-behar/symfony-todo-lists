@@ -1,6 +1,30 @@
-@import "../../node_modules/@fortawesome/fontawesome-free/css/fontawesome.css";
 @import "../../node_modules/bootstrap/dist/css/bootstrap.css";
+@import "../../node_modules/@fortawesome/fontawesome-free/css/fontawesome.css";
+@import "../../node_modules/@fortawesome/fontawesome-free/css/solid.css";
+@import "../../node_modules/@fortawesome/fontawesome-free/css/regular.css";
+@import "../../node_modules/@fortawesome/fontawesome-free/css/brands.css";
+
+* {
+    border: 1px solid red;
+}
 
 body {
-    background-color: #D29113;
+    /* background-color: #D29113; */
+}
+
+#content {
+    width: 60%;
+    margin: 0 auto;
+}
+
+h2, h4 {
+    text-align: center;
+}
+
+p.inner-text {
+    display: inline;
+}
+
+div.button {
+    text-align: center;
 }

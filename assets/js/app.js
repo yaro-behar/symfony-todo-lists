@@ -1,11 +1,8 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
+const $ = require('jquery');
 
 require('../css/app.css');
-
-const $ = require('jquery');
 require('bootstrap');
+require('@fortawesome/fontawesome-free/js/fontawesome');
+require('@fortawesome/fontawesome-free/js/solid');
+require('@fortawesome/fontawesome-free/js/regular');
+require('@fortawesome/fontawesome-free/js/brands');

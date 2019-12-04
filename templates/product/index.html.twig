@@ -3,5 +3,68 @@
 {% block title %}Todo lists{% endblock %}
 
 {% block body %}
-    <button type="button" class="btn btn-primary">Add TODO list</button>
+    <div id="content">
+        <h2>SIMPLE TODO LISTS</h2>
+
+        <h4>FROM RUBY GARAGE</h4>
+
+        <div id="projects">
+            <div class="project">
+
+                {# Project section #}
+                <div class="project-name">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                    <p class="inner-text">Complete the test task for Ruby Garage</p>
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    <span class="glyphicon glyphicon-trash"></span>
+                </div>
+
+                {# Add task section #}
+                <div class="task-add">
+                    <span class="glyphicon glyphicon-plus-sign"></span>
+                    <input class="form-control-sm" type="text" placeholder="Start typing here to create a task...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-info" type="button">Add Task</button>
+                    </span>
+                </div>
+
+                {# Tasks section #}
+                <div class="task-name">
+                    <span class="input-group-addon">
+                        <input type="checkbox">
+                    </span>
+                    <p class="inner-text">Buy a milk</p>
+                    <span class="glyphicon glyphicon-sort"></span>
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    <span class="glyphicon glyphicon-trash"></span>
+                </div>
+
+                <div class="task-name">
+                    <span class="input-group-addon">
+                        <input type="checkbox">
+                    </span>
+                    <p class="inner-text">Call mam</p>
+                    <span class="glyphicon glyphicon-sort"></span>
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    <span class="glyphicon glyphicon-trash"></span>
+                </div>
+
+                <div class="task-name">
+                    <span class="input-group-addon">
+                        <input type="checkbox">
+                    </span>
+                    <p class="inner-text">Clean the room</p>
+                    <span class="glyphicon glyphicon-sort"></span>
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    <span class="glyphicon glyphicon-trash"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="button">
+            <button type="button" class="btn btn-primary">
+                <span class="glyphicon glyphicon-plus-sign"></span> Add TODO list
+            </button>
+        </div>
+    </div>
 {% endblock %}
