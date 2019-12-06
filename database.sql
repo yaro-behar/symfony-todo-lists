@@ -25,26 +25,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `migration_versions`
---
-
-DROP TABLE IF EXISTS `migration_versions`;
-CREATE TABLE IF NOT EXISTS `migration_versions` (
-  `version` varchar(14) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `executed_at` datetime NOT NULL COMMENT '(DC2Type:datetime_immutable)',
-  PRIMARY KEY (`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Дамп данных таблицы `migration_versions`
---
-
-INSERT INTO `migration_versions` (`version`, `executed_at`) VALUES
-('20191201124603', '2019-12-01 12:46:13');
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `project`
 --
 

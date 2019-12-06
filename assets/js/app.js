@@ -1,8 +1,9 @@
-const $ = require('jquery');
-
 require('../css/app.css');
-require('bootstrap');
-require('@fortawesome/fontawesome-free/js/fontawesome');
-require('@fortawesome/fontawesome-free/js/solid');
-require('@fortawesome/fontawesome-free/js/regular');
-require('@fortawesome/fontawesome-free/js/brands');
+
+import { library, dom } from "@fortawesome/fontawesome-svg-core";
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { far } from '@fortawesome/free-regular-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+
+library.add(fas, far, fab);
+dom.watch();
