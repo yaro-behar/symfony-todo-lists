@@ -1,9 +1,19 @@
-require('../css/app.css');
+import '../css/app.css';
 
-import { library, dom } from "@fortawesome/fontawesome-svg-core";
-import { fab } from '@fortawesome/free-brands-svg-icons';
-import { far } from '@fortawesome/free-regular-svg-icons';
-import { fas } from '@fortawesome/free-solid-svg-icons';
+import $ from 'jquery';
+window.jQuery = $;
+window.$ = $;
 
-library.add(fas, far, fab);
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { library, dom } from '@fortawesome/fontawesome-svg-core';
+import {
+    faPencilAlt,
+    faTrashAlt,
+    faSort,
+    faPlus,
+    faCalendarAlt
+} from '@fortawesome/free-solid-svg-icons';
+
+library.add(faPencilAlt, faTrashAlt, faSort, faPlus, faCalendarAlt);
 dom.watch();
