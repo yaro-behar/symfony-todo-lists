@@ -22,3 +22,22 @@ p.inner-text {
 div.button {
     text-align: center;
 }
+
+div.project-name {
+    background-color: #416EAB;
+}
+
+div.project-name .fa-calendar-alt, .fa-pencil-alt, .fa-trash-alt, p {
+    color: #FFFFFF;
+    margin: 5px;
+}
+
+div.project-name .fa-pencil-alt, .fa-trash-alt {
+    float: right;
+    cursor: pointer;
+}
+
+div.project-name p {
+    font-family: Verdana, serif;
+    font-size: 20px;
+}
