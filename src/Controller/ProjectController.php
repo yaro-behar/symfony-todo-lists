@@ -12,6 +12,15 @@ class ProjectController extends AbstractController
      */
     public function index()
     {
-        return $this->render('product/index.html.twig');
+        $id = 22;
+
+        $userRepository = $this->getDoctrine()->getRepository(\App\Entity\User::class);
+        $user = $userRepository->find($id);
+
+        if (!$user) {
+            throw $this->createNotFoundException("No user found for id {$id}");
+        }
+
+        return $this->render('product/index.html.twig', ['user' => $user]);
     }
 }

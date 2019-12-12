@@ -1,18 +1,26 @@
+/* Common section */
+
 * {
     border: 1px solid red;
 }
 
-body {
-    /* background-color: #D29113; */
+html, body {
+    margin: 0;
+    padding: 0;
 }
 
 #content {
     width: 60%;
     margin: 0 auto;
+    /* background-color: #D29113; */
 }
 
 h2, h4 {
     text-align: center;
+}
+
+#projects {
+    width: 100%;
 }
 
 p.inner-text {
@@ -23,21 +31,58 @@ div.button {
     text-align: center;
 }
 
-div.project-name {
+.project {
+    margin-bottom: 40px;
+}
+
+/* Project section */
+
+.project-name {
+    height: 70px;
     background-color: #416EAB;
 }
 
-div.project-name .fa-calendar-alt, .fa-pencil-alt, .fa-trash-alt, p {
+.project-name .fa-calendar-alt, .project-name .fa-pencil-alt, .project-name .fa-trash-alt, .project-name p {
     color: #FFFFFF;
-    margin: 5px;
+
 }
 
-div.project-name .fa-pencil-alt, .fa-trash-alt {
+.project-name .fa-pencil-alt, .project-name .fa-trash-alt {
     float: right;
     cursor: pointer;
 }
 
-div.project-name p {
+.project-name p {
     font-family: Verdana, serif;
     font-size: 20px;
+}
+
+/* Add task section */
+
+.task-add .fa-plus {
+    color: #72A98B;
+}
+
+.task-add .btn-info {
+    background-color: #72A98B;
+}
+
+.task-add input {
+    width: 80%;
+}
+
+/* Task section */
+
+.task-name {
+    background-color: #FFFFFF;
+}
+
+.task-name .fa-sort, .task-name .fa-pencil-alt, .task-name .fa-trash-alt, .task-name p {
+    margin: 5px;
+}
+
+.task-name .fa-sort, .task-name .fa-pencil-alt, .task-name .fa-trash-alt {
+    float: right;
+    cursor: pointer;
+    color: #A5A5A0;
 }

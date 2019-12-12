@@ -9,56 +9,34 @@
         <h4>FROM RUBY GARAGE</h4>
 
         <div id="projects">
-            <div class="project">
-
-                {# Project section #}
-                <div class="project-name">
-                    <i class="fas fa-calendar-alt fa-2x"></i>
-                    <p class="inner-text">Complete the test task for Ruby Garage</p>
-                    <i class="fas fa-pencil-alt fa-lg"></i>
-                    <i class="fas fa-trash-alt fa-lg"></i>
-                </div>
-
-                {# Add task section #}
-                <div class="task-add">
-                    <i class="fas fa-plus fa-2x"></i>
-                    <input class="form-control-sm" type="text" placeholder="Start typing here to create a task...">
-                    <span class="input-group-btn">
+            {% for project in user.projects %}
+                <div class="project">
+                    <div class="project-name">
+                        <i class="fas fa-calendar-alt fa-2x"></i>
+                        <p class="inner-text">{{ project.name|e }}</p>
+                        <i class="fas fa-pencil-alt fa-lg"></i>
+                        <i class="fas fa-trash-alt fa-lg"></i>
+                    </div>
+                    <div class="task-add">
+                        <i class="fas fa-plus fa-2x"></i>
+                        <input class="form-control-sm" type="text" placeholder="Start typing here to create a task...">
+                        <span class="input-group-btn">
                         <button class="btn btn-info" type="button">Add Task</button>
                     </span>
+                    </div>
+                    {% for task in project.tasks %}
+                        <div class="task-name">
+                            <span class="input-group-addon">
+                                <input type="checkbox">
+                            </span>
+                            <p class="inner-text">{{ task.name|e }}</p>
+                            <i class="fas fa-sort fa-lg"></i>
+                            <i class="fas fa-pencil-alt fa-lg"></i>
+                            <i class="fas fa-trash-alt fa-lg"></i>
+                        </div>
+                    {% endfor %}
                 </div>
-
-                {# Tasks section #}
-                <div class="task-name">
-                    <span class="input-group-addon">
-                        <input type="checkbox">
-                    </span>
-                    <p class="inner-text">Buy a milk</p>
-                    <i class="fas fa-sort fa-lg"></i>
-                    <i class="fas fa-pencil-alt fa-lg"></i>
-                    <i class="fas fa-trash-alt fa-lg"></i>
-                </div>
-
-                <div class="task-name">
-                    <span class="input-group-addon">
-                        <input type="checkbox">
-                    </span>
-                    <p class="inner-text">Call mam</p>
-                    <i class="fas fa-sort fa-lg"></i>
-                    <i class="fas fa-pencil-alt fa-lg"></i>
-                    <i class="fas fa-trash-alt fa-lg"></i>
-                </div>
-
-                <div class="task-name">
-                    <span class="input-group-addon">
-                        <input type="checkbox">
-                    </span>
-                    <p class="inner-text">Clean the room</p>
-                    <i class="fas fa-sort fa-lg"></i>
-                    <i class="fas fa-pencil-alt fa-lg"></i>
-                    <i class="fas fa-trash-alt fa-lg"></i>
-                </div>
-            </div>
+            {% endfor %}
         </div>
 
         <div class="button">
