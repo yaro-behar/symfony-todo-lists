@@ -3,6 +3,14 @@
 {% block title %}Todo lists{% endblock %}
 
 {% block body %}
+    <div id="header">
+        <p class="inner-text">Hello, {{ user.username|e }}</p>
+
+        <a href="{{ path('logout') }}" class="btn btn-info">
+            <span class="glyphicon glyphicon-log-out"></span> Logout
+        </a>
+    </div>
+
     <div id="content">
         <h2>SIMPLE TODO LISTS</h2>
 

@@ -9,6 +9,10 @@ html, body {
     padding: 0;
 }
 
+#header a {
+    float: right;
+}
+
 #content {
     width: 60%;
     margin: 0 auto;

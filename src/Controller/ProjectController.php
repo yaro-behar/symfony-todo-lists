@@ -8,11 +8,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProjectController extends AbstractController
 {
     /**
-     * @Route("/project/index", methods={"GET"}, name="project-list")
+     * @Route("/projects", methods={"GET"}, name="projects")
      */
     public function index()
     {
-        $id = 22;
+        $id = 4;
 
         $userRepository = $this->getDoctrine()->getRepository(\App\Entity\User::class);
         $user = $userRepository->find($id);
