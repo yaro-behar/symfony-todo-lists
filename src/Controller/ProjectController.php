@@ -8,17 +8,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProjectController extends AbstractController
 {
     /**
-     * @Route("/projects", methods={"GET"}, name="projects")
+     * @Route("/", methods={"GET"}, name="projects")
      */
     public function index()
     {
-        $id = 4;
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
 
-        $userRepository = $this->getDoctrine()->getRepository(\App\Entity\User::class);
-        $user = $userRepository->find($id);
-
-        if (!$user) {
-            throw $this->createNotFoundException("No user found for id {$id}");
+        if (is_null($user)) {
+            throw $this->createNotFoundException("No user found for id {$user->getId()}");
         }
 
         return $this->render('product/index.html.twig', ['user' => $user]);

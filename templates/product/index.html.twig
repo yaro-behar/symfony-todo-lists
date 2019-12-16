@@ -6,7 +6,7 @@
     <div id="header">
         <p class="inner-text">Hello, {{ user.username|e }}</p>
 
-        <a href="{{ path('logout') }}" class="btn btn-info">
+        <a href="{{ logout_path('main') }}" class="btn btn-info">
             <span class="glyphicon glyphicon-log-out"></span> Logout
         </a>
     </div>
@@ -20,27 +20,33 @@
             {% for project in user.projects %}
                 <div class="project">
                     <div class="project-name">
-                        <i class="fas fa-calendar-alt fa-2x"></i>
-                        <p class="inner-text">{{ project.name|e }}</p>
-                        <i class="fas fa-pencil-alt fa-lg"></i>
-                        <i class="fas fa-trash-alt fa-lg"></i>
+                        <div>
+                            <i class="fas fa-calendar-alt fa-2x"></i>
+                            <p class="inner-text">{{ project.name|e }}</p>
+                            <i class="fas fa-pencil-alt fa-lg"></i>
+                            <i class="fas fa-trash-alt fa-lg"></i>
+                        </div>
                     </div>
                     <div class="task-add">
-                        <i class="fas fa-plus fa-2x"></i>
-                        <input class="form-control-sm" type="text" placeholder="Start typing here to create a task...">
-                        <span class="input-group-btn">
-                        <button class="btn btn-info" type="button">Add Task</button>
-                    </span>
+                        <div>
+                            <i class="fas fa-plus fa-2x"></i>
+                            <input class="form-control-sm" type="text" placeholder="Start typing here to create a task...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-info" type="button">Add Task</button>
+                            </span>
+                        </div>
                     </div>
                     {% for task in project.tasks %}
                         <div class="task-name">
-                            <span class="input-group-addon">
-                                <input type="checkbox">
-                            </span>
-                            <p class="inner-text">{{ task.name|e }}</p>
-                            <i class="fas fa-sort fa-lg"></i>
-                            <i class="fas fa-pencil-alt fa-lg"></i>
-                            <i class="fas fa-trash-alt fa-lg"></i>
+                            <div>
+                                <span class="input-group-addon">
+                                    <input type="checkbox">
+                                </span>
+                                <p class="inner-text">{{ task.name|e }}</p>
+                                <i class="fas fa-sort fa-lg"></i>
+                                <i class="fas fa-pencil-alt fa-lg"></i>
+                                <i class="fas fa-trash-alt fa-lg"></i>
+                            </div>
                         </div>
                     {% endfor %}
                 </div>

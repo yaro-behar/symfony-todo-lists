@@ -46,13 +46,16 @@ div.button {
     background-color: #416EAB;
 }
 
-.project-name .fa-calendar-alt, .project-name .fa-pencil-alt, .project-name .fa-trash-alt, .project-name p {
-    color: #FFFFFF;
+.project-name div {
 
 }
 
+.project-name .fa-calendar-alt, .project-name .fa-pencil-alt, .project-name .fa-trash-alt, .project-name p {
+    color: #FFFFFF;
+}
+
 .project-name .fa-pencil-alt, .project-name .fa-trash-alt {
-    float: right;
+    /* float: right; */
     cursor: pointer;
 }
 
@@ -78,15 +81,16 @@ div.button {
 /* Task section */
 
 .task-name {
+    height: 50px;
     background-color: #FFFFFF;
 }
 
 .task-name .fa-sort, .task-name .fa-pencil-alt, .task-name .fa-trash-alt, .task-name p {
-    margin: 5px;
+
 }
 
 .task-name .fa-sort, .task-name .fa-pencil-alt, .task-name .fa-trash-alt {
-    float: right;
+    /* float: right; */
     cursor: pointer;
     color: #A5A5A0;
 }
