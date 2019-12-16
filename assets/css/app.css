@@ -1,12 +1,17 @@
 /* Common section */
 
 * {
-    border: 1px solid red;
+     border: 1px solid red;
 }
 
 html, body {
     margin: 0;
     padding: 0;
+}
+
+#header input {
+    display: inline;
+    width: auto;
 }
 
 #header a {
@@ -19,7 +24,7 @@ html, body {
     /* background-color: #D29113; */
 }
 
-h2, h4 {
+#content h2, #content h3 {
     text-align: center;
 }
 
@@ -37,6 +42,7 @@ div.button {
 
 .project {
     margin-bottom: 40px;
+    border: 1px solid #000000;
 }
 
 /* Project section */
@@ -68,6 +74,7 @@ div.button {
 
 .task-add .fa-plus {
     color: #72A98B;
+    border-top: 1px solid #000000;
 }
 
 .task-add .btn-info {
@@ -83,6 +90,7 @@ div.button {
 .task-name {
     height: 50px;
     background-color: #FFFFFF;
+    border-top: 1px solid #000000;
 }
 
 .task-name .fa-sort, .task-name .fa-pencil-alt, .task-name .fa-trash-alt, .task-name p {

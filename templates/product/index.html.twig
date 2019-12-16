@@ -4,17 +4,17 @@
 
 {% block body %}
     <div id="header">
-        <p class="inner-text">Hello, {{ user.username|e }}</p>
+        <input type="text" readonly class="form-control-plaintext" value="{{ user.username|e }}">
 
-        <a href="{{ logout_path('main') }}" class="btn btn-info">
+        <a href="{{ logout_path('main') }}" class="btn btn-primary">
             <span class="glyphicon glyphicon-log-out"></span> Logout
         </a>
     </div>
 
     <div id="content">
-        <h2>SIMPLE TODO LISTS</h2>
+        <h2 class="font-weight-normal">SIMPLE TODO LISTS</h2>
 
-        <h4>FROM RUBY GARAGE</h4>
+        <h3 class="font-weight-normal">FROM RUBY GARAGE</h3>
 
         <div id="projects">
             {% for project in user.projects %}
