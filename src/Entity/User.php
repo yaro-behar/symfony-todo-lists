@@ -69,13 +69,6 @@ class User implements UserInterface
         return $this->projects;
     }
 
-    public function setProjects(Collection $projects): self
-    {
-        $this->projects = $projects;
-
-        return $this;
-    }
-
     /**
      * A visual identifier that represents this user
      *

@@ -4,21 +4,46 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Entity\User;
+use App\Entity\Project;
 
 class ProjectController extends AbstractController
 {
     /**
-     * @Route("/", methods={"GET"}, name="projects")
+     * @Route("/", name="project-list", methods={"GET"})
      */
     public function index()
     {
-        /** @var \App\Entity\User $user */
-        $user = $this->getUser();
+        return $this->render('product/index.html.twig', ['user' => $this->getUser()]);
+    }
 
-        if (is_null($user)) {
-            throw $this->createNotFoundException("No user found for id {$user->getId()}");
-        }
+    /**
+     * @Route("/project/create", name="project-create", methods={"GET"})
+     */
+    public function create()
+    {
+        $project = new Project();
+        $project->setName('New Default Project');
+        $project->setUser($this->getUser());
 
-        return $this->render('product/index.html.twig', ['user' => $user]);
+        $manager = $this->getDoctrine()->getManager();
+        $manager->persist($project);
+        $manager->flush();
+
+        return new JsonResponse(
+            $this->render('product/create.html.twig', ['project' => $project])->getContent(),
+            Response::HTTP_OK,
+            ['content-type' => 'text/html']
+        );
+    }
+
+    /**
+     * @Route("/project/delete/{id}", name="project-delete", methods={"GET"})
+     */
+    public function delete(int $id)
+    {
+
     }
 }

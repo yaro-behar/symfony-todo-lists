@@ -72,11 +72,4 @@ class Project
     {
         return $this->tasks;
     }
-
-    public function setTasks(Collection $tasks): self
-    {
-        $this->tasks = $tasks;
-
-        return $this;
-    }
 }
