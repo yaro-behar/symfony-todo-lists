@@ -63,8 +63,19 @@
 
 {% block javascripts %}
     {{ parent() }}
-
-    $(document).on('click', 'button#add-todo-list', function(){
-        alert('clicked!');
-    });
+    <script>
+        $('#add-todo-list').click(function(){
+            $.ajax({
+                url: '{{ path('project-create') }}',
+                method: 'GET',
+                dataType: 'json',
+                success: function(response){
+                    $("#projects").append(response);
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
+                }
+            });
+        });
+    </script>
 {% endblock %}
