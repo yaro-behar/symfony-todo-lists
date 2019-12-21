@@ -43,6 +43,16 @@ class ProjectController extends AbstractController
      */
     public function delete(int $id)
     {
+        $manager = $this->getDoctrine()->getManager();
 
+        $project = $manager->getRepository(Project::class)->find($id);
+        if (!$project) {
+            throw $this->createNotFoundException('No project found for id ' . $id);
+        }
+
+        $manager->remove($project);
+        $manager->flush();
+
+        return new JsonResponse(null, Response::HTTP_OK);
     }
 }

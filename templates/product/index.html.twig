@@ -18,7 +18,7 @@
 
         <div id="projects">
             {% for project in user.projects %}
-                <div class="project">
+                <div id="{{ project.id }}" class="project">
                     <div class="project-name">
                         <div>
                             <i class="fas fa-calendar-alt fa-2x"></i>
@@ -64,18 +64,35 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        $('#add-todo-list').click(function(){
-            $.ajax({
-                url: '{{ path('project-create') }}',
-                method: 'GET',
-                dataType: 'json',
-                success: function(response){
-                    $("#projects").append(response);
-                },
-                error: function(jqXHR, textStatus, errorThrown){
-                    alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
-                }
+        $("document").ready(function(){
+            $('#add-todo-list').click(function(){
+                $.ajax({
+                    url: '/project/create',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(response){
+                        $("#projects").append(response);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
+                    }
+                });
             });
+
+            $('div.project-name svg.fa-trash-alt > *').click(function(){
+                var id = $(this).closest('div.project').attr('id');
+                $.ajax({
+                    url: '/project/delete/'+id,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(response){
+                        $('div#'+id).remove();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
+                    }
+                });
+            })
         });
     </script>
 {% endblock %}
