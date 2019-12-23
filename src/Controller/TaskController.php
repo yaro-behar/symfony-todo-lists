@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use App\Entity\Project;
 use App\Entity\Task;
 
 class TaskController extends AbstractController
@@ -14,14 +15,27 @@ class TaskController extends AbstractController
     /**
      * @Route("/task/create", name="task-create", methods={"POST"})
      */
-    public function create()
+    public function create(Request $request)
     {
-        // TODO: continue
-        $request = Request::createFromGlobals();
-        $projectId = $request->query->get('project_id');
-        $taskName = $request->query->get('task_name');
+        $manager = $this->getDoctrine()->getManager();
 
-        return new JsonResponse(['project_id' => $projectId, 'task_name' => $taskName], Response::HTTP_OK);
+        $project = $manager->getRepository(Project::class)->find($request->request->get('project_id'));
+        if (!$project) {
+            throw $this->createNotFoundException('No project found for id ' . $request->request->get('project_id'));
+        }
+
+        $task = new Task();
+        $task->setName($request->request->get('task_name'));
+        $task->setProject($project);
+
+        $manager->persist($task);
+        $manager->flush();
+
+        return new JsonResponse(
+            $this->render('task/create.html.twig', ['task' => $task])->getContent(),
+            Response::HTTP_OK,
+            ['content-type' => 'text/html']
+        );
     }
 
     /**

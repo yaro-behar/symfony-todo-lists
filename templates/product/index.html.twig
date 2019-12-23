@@ -36,19 +36,21 @@
                             </span>
                         </div>
                     </div>
-                    {% for task in project.tasks %}
-                        <div id="task-{{ task.id }}" class="task-name">
-                            <div>
-                                <span class="input-group-addon">
-                                    <input type="checkbox">
-                                </span>
-                                <p class="inner-text">{{ task.name|e }}</p>
-                                <i class="fas fa-sort fa-lg"></i>
-                                <i class="fas fa-pencil-alt fa-lg"></i>
-                                <i class="fas fa-trash-alt fa-lg"></i>
+                    <div id="tasks">
+                        {% for task in project.tasks %}
+                            <div id="task-{{ task.id }}" class="task-name">
+                                <div>
+                                    <span class="input-group-addon">
+                                        <input type="checkbox">
+                                    </span>
+                                    <p class="inner-text">{{ task.name|e }}</p>
+                                    <i class="fas fa-sort fa-lg"></i>
+                                    <i class="fas fa-pencil-alt fa-lg"></i>
+                                    <i class="fas fa-trash-alt fa-lg"></i>
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                 </div>
             {% endfor %}
         </div>
@@ -107,8 +109,7 @@
                         dataType: 'json',
                         data: {project_id: id, task_name: value},
                         success: function(response){
-                            console.log(response);
-                            // TODO: continue
+                            $('#project-'+id+' > #tasks').append(response);
                         },
                         error: function(jqXHR, textStatus, errorThrown){
                             alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
