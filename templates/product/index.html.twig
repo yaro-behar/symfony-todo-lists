@@ -23,6 +23,9 @@
                         <div>
                             <i class="fas fa-calendar-alt fa-2x"></i>
                             <p class="inner-text">{{ project.name|e }}</p>
+                            <input class="form-control-sm" type="text" placeholder="Start typing here to update a project...">
+                            <i class="fas fa-plus-square fa-lg"></i>
+                            <i class="fa fa-window-close fa-lg"></i>
                             <i class="fas fa-pencil-alt fa-lg"></i>
                             <i class="fas fa-trash-alt fa-lg"></i>
                         </div>
@@ -30,7 +33,7 @@
                     <div class="task-add">
                         <div>
                             <i class="fas fa-plus fa-2x"></i>
-                            <input id="task-add-{{ project.id }}" class="form-control-sm" type="text" placeholder="Start typing here to create a task...">
+                            <input class="form-control-sm" type="text" placeholder="Start typing here to create a task...">
                             <span class="input-group-btn">
                                 <button class="btn btn-info" type="button">Add Task</button>
                             </span>
@@ -38,7 +41,7 @@
                     </div>
                     <div id="tasks">
                         {% for task in project.tasks %}
-                            <div id="task-{{ task.id }}" class="task-name">
+                            <div id="task-{{ task.id }}" class="task">
                                 <div>
                                     <span class="input-group-addon">
                                         <input type="checkbox">
@@ -66,9 +69,32 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        $("document").ready(function(){
+        $('document').ready(function(){
+            // Update Project
+            $('div.project-name svg.fa-pencil-alt > *').on('click', function(){
+                var id = $(this).closest('div.project').attr('id').split('-')[1];
+                $('#project-'+id+' div.project-name p').hide();
+                $('#project-'+id+' div.project-name input').show();
+                $('#project-'+id+' div.project-name svg.fa-plus-square').show();
+                $('#project-'+id+' div.project-name svg.fa-window-close').show();
+            });
+
+            // Accept update
+            $('div.project-name svg.fa-plus-square > *').on('click', function(){
+                // TODO: continue
+            });
+
+            // Cancel update
+            $('div.project-name svg.fa-window-close > *').on('click', function(){
+                var id = $(this).closest('div.project').attr('id').split('-')[1];
+                $('#project-'+id+' div.project-name input').hide();
+                $('#project-'+id+' div.project-name svg.fa-plus-square').hide();
+                $('#project-'+id+' div.project-name svg.fa-window-close').hide();
+                $('#project-'+id+' div.project-name p').show();
+            });
+
             // Add Project
-            $('#add-todo-list').click(function(){
+            $('#add-todo-list').on('click', function(){
                 $.ajax({
                     url: '/project/create',
                     method: 'GET',
@@ -83,7 +109,7 @@
             });
 
             // Delete Project
-            $('div.project-name svg.fa-trash-alt > *').click(function(){
+            $('div.project-name svg.fa-trash-alt > *').on('click', function(){
                 var id = $(this).closest('div.project').attr('id').split('-')[1];
                 $.ajax({
                     url: '/project/delete/'+id,
@@ -98,10 +124,12 @@
                 });
             });
 
+            // Update Task
+
             // Add Task
-            $('div.task-add button').click(function(){
+            $('div.task-add button').on('click', function(){
                 var id = $(this).closest('div.project').attr('id').split('-')[1];
-                var value = $('#task-add-'+id).val();
+                var value = $(this).parent().prev().val();
                 if (value) {
                     $.ajax({
                         url: '/task/create',
@@ -121,8 +149,8 @@
             });
 
             // Delete Task
-            $('div.task-name svg.fa-trash-alt > *').click(function(){
-                var id = $(this).closest('div.task-name').attr('id').split('-')[1];
+            $('div.task svg.fa-trash-alt > *').on('click', function(){
+                var id = $(this).closest('div.task').attr('id').split('-')[1];
                 $.ajax({
                     url: '/task/delete/'+id,
                     method: 'GET',

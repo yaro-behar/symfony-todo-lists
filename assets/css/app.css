@@ -60,7 +60,7 @@ div.button {
     color: #FFFFFF;
 }
 
-.project-name .fa-pencil-alt, .project-name .fa-trash-alt {
+.project-name .fa-plus-square, .project-name .fa-window-close, .project-name .fa-pencil-alt, .project-name .fa-trash-alt {
     /* float: right; */
     cursor: pointer;
 }
@@ -68,6 +68,10 @@ div.button {
 .project-name p {
     font-family: Verdana, serif;
     font-size: 20px;
+}
+
+.project-name input, .project-name .fa-plus-square, .project-name .fa-window-close {
+    display: none;
 }
 
 /* Add task section */
@@ -87,17 +91,17 @@ div.button {
 
 /* Task section */
 
-.task-name {
+.task {
     height: 50px;
     background-color: #FFFFFF;
     border-top: 1px solid #000000;
 }
 
-.task-name .fa-sort, .task-name .fa-pencil-alt, .task-name .fa-trash-alt, .task-name p {
+.task .fa-sort, .task .fa-pencil-alt, .task .fa-trash-alt, .task p {
 
 }
 
-.task-name .fa-sort, .task-name .fa-pencil-alt, .task-name .fa-trash-alt {
+.task .fa-sort, .task .fa-pencil-alt, .task .fa-trash-alt {
     /* float: right; */
     cursor: pointer;
     color: #A5A5A0;

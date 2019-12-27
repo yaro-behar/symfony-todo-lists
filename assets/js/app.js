@@ -12,8 +12,18 @@ import {
     faTrashAlt,
     faSort,
     faPlus,
-    faCalendarAlt
+    faPlusSquare,
+    faCalendarAlt,
+    faWindowClose
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faPencilAlt, faTrashAlt, faSort, faPlus, faCalendarAlt);
+library.add(
+    faPencilAlt,
+    faTrashAlt,
+    faSort,
+    faPlus,
+    faPlusSquare,
+    faCalendarAlt,
+    faWindowClose
+);
 dom.watch();
