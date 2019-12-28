@@ -73,24 +73,33 @@
             // Update Project
             $('div.project-name svg.fa-pencil-alt > *').on('click', function(){
                 var id = $(this).closest('div.project').attr('id').split('-')[1];
-                $('#project-'+id+' div.project-name p').hide();
-                $('#project-'+id+' div.project-name input').show();
-                $('#project-'+id+' div.project-name svg.fa-plus-square').show();
-                $('#project-'+id+' div.project-name svg.fa-window-close').show();
+                showProjectInput(id);
             });
-
-            // Accept update
             $('div.project-name svg.fa-plus-square > *').on('click', function(){
-                // TODO: continue
+                var id = $(this).closest('div.project').attr('id').split('-')[1];
+                var value = $(this).parent().prev().val();
+                if (value) {
+                    $.ajax({
+                        url: '/project/update',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: {project_id: id, project_name: value},
+                        success: function(response){
+                            $('#project-'+id+' div.project-name p').text(value);
+                            hideProjectInput(id);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown){
+                            hideProjectInput(id);
+                            alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
+                        }
+                    });
+                    return;
+                }
+                alert('Please enter a project name!');
             });
-
-            // Cancel update
             $('div.project-name svg.fa-window-close > *').on('click', function(){
                 var id = $(this).closest('div.project').attr('id').split('-')[1];
-                $('#project-'+id+' div.project-name input').hide();
-                $('#project-'+id+' div.project-name svg.fa-plus-square').hide();
-                $('#project-'+id+' div.project-name svg.fa-window-close').hide();
-                $('#project-'+id+' div.project-name p').show();
+                hideProjectInput(id);
             });
 
             // Add Project
@@ -163,6 +172,21 @@
                     }
                 });
             });
+
+            function showProjectInput(id){
+                $('#project-'+id+' div.project-name p').hide();
+                $('#project-'+id+' div.project-name svg.fa-pencil-alt').hide();
+                $('#project-'+id+' div.project-name input').show();
+                $('#project-'+id+' div.project-name svg.fa-plus-square').show();
+                $('#project-'+id+' div.project-name svg.fa-window-close').show();
+            }
+            function hideProjectInput(id){
+                $('#project-'+id+' div.project-name input').hide();
+                $('#project-'+id+' div.project-name svg.fa-plus-square').hide();
+                $('#project-'+id+' div.project-name svg.fa-window-close').hide();
+                $('#project-'+id+' div.project-name p').show();
+                $('#project-'+id+' div.project-name svg.fa-pencil-alt').show();
+            }
         });
     </script>
 {% endblock %}
