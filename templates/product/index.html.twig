@@ -18,39 +18,33 @@
 
         <div id="projects">
             {% for project in user.projects %}
-                <div id="project-{{ project.id }}" class="project">
+                <div data-id="{{ project.id }}" class="project">
                     <div class="project-name">
-                        <div>
-                            <i class="fas fa-calendar-alt fa-2x"></i>
-                            <p class="inner-text">{{ project.name|e }}</p>
-                            <input class="form-control-sm" type="text" placeholder="Start typing here to update a project...">
-                            <i class="fas fa-plus-square fa-lg"></i>
-                            <i class="fa fa-window-close fa-lg"></i>
-                            <i class="fas fa-pencil-alt fa-lg"></i>
-                            <i class="fas fa-trash-alt fa-lg"></i>
-                        </div>
+                        <i class="fas fa-calendar-alt fa-2x"></i>
+                        <p class="inner-text">{{ project.name|e }}</p>
+                        <input class="form-control-sm" type="text" placeholder="Start typing here to update a project...">
+                        <i class="fas fa-plus-square fa-lg"></i>
+                        <i class="fa fa-window-close fa-lg"></i>
+                        <i class="fas fa-pencil-alt fa-lg"></i>
+                        <i class="fas fa-trash-alt fa-lg"></i>
                     </div>
                     <div class="task-add">
-                        <div>
-                            <i class="fas fa-plus fa-2x"></i>
-                            <input class="form-control-sm" type="text" placeholder="Start typing here to create a task...">
-                            <span class="input-group-btn">
-                                <button class="btn btn-info" type="button">Add Task</button>
-                            </span>
-                        </div>
+                        <i class="fas fa-plus fa-2x"></i>
+                        <input class="form-control-sm" type="text" placeholder="Start typing here to create a task...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-info" type="button">Add Task</button>
+                        </span>
                     </div>
                     <div id="tasks">
                         {% for task in project.tasks %}
-                            <div id="task-{{ task.id }}" class="task">
-                                <div>
-                                    <span class="input-group-addon">
-                                        <input type="checkbox">
-                                    </span>
-                                    <p class="inner-text">{{ task.name|e }}</p>
-                                    <i class="fas fa-sort fa-lg"></i>
-                                    <i class="fas fa-pencil-alt fa-lg"></i>
-                                    <i class="fas fa-trash-alt fa-lg"></i>
-                                </div>
+                            <div data-id="{{ task.id }}" class="task">
+                                <span class="input-group-addon">
+                                    <input type="checkbox">
+                                </span>
+                                <p class="inner-text">{{ task.name|e }}</p>
+                                <i class="fas fa-sort fa-lg"></i>
+                                <i class="fas fa-pencil-alt fa-lg"></i>
+                                <i class="fas fa-trash-alt fa-lg"></i>
                             </div>
                         {% endfor %}
                     </div>
