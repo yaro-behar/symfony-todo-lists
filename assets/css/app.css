@@ -1,7 +1,7 @@
 /* Common section */
 
 * {
-     border: 1px solid red;
+     /* border: 1px solid red; */
 }
 
 html, body {
@@ -21,15 +21,10 @@ html, body {
 #content {
     width: 60%;
     margin: 0 auto;
-    /* background-color: #D29113; */
 }
 
 #content h2, #content h3 {
     text-align: center;
-}
-
-#projects {
-    width: 100%;
 }
 
 p.inner-text {
@@ -48,20 +43,15 @@ div.button {
 /* Project section */
 
 .project-name {
-    height: 70px;
+    padding: 15px 0;
     background-color: #416EAB;
 }
 
-.project-name div {
-
+.project-name .fa-calendar-alt, .project-name p, .project-name .fa-plus-square, .project-name .fa-window-close, .project-name .fa-pencil-alt, .project-name .fa-trash-alt {
+    color: #ffffff;
 }
 
-.project-name .fa-calendar-alt, .project-name .fa-pencil-alt, .project-name .fa-trash-alt, .project-name p {
-    color: #FFFFFF;
-}
-
-.project-name .fa-plus-square, .project-name .fa-window-close, .project-name .fa-pencil-alt, .project-name .fa-trash-alt {
-    /* float: right; */
+.fa-plus-square, .fa-window-close, .fa-pencil-alt, .fa-sort, .fa-trash-alt {
     cursor: pointer;
 }
 
@@ -70,39 +60,32 @@ div.button {
     font-size: 20px;
 }
 
-.project-name input, .project-name .fa-plus-square, .project-name .fa-window-close {
+.project-name .form-control-sm, .task .form-control-sm, .fa-plus-square, .fa-window-close {
     display: none;
 }
 
 /* Add task section */
 
+.task-add {
+    padding: 15px 0;
+}
+
 .task-add .fa-plus {
     color: #72A98B;
-    border-top: 1px solid #000000;
 }
 
-.task-add .btn-info {
+.task-add .input-group-text {
+    cursor: pointer;
     background-color: #72A98B;
-}
-
-.task-add input {
-    width: 80%;
 }
 
 /* Task section */
 
 .task {
-    height: 50px;
-    background-color: #FFFFFF;
+    padding: 15px 0;
     border-top: 1px solid #000000;
 }
 
-.task .fa-sort, .task .fa-pencil-alt, .task .fa-trash-alt, .task p {
-
-}
-
-.task .fa-sort, .task .fa-pencil-alt, .task .fa-trash-alt {
-    /* float: right; */
-    cursor: pointer;
-    color: #A5A5A0;
+.task p, .task .fa-plus-square, .task .fa-window-close, .task .fa-pencil-alt, .task .fa-sort, .task .fa-trash-alt {
+    color: #a5a5a0;
 }

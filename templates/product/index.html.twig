@@ -20,7 +20,7 @@
             {% for project in user.projects %}
                 <div data-id="{{ project.id }}" class="project">
                     <div class="project-name">
-                        <i class="fas fa-calendar-alt fa-2x"></i>
+                        <i class="fas fa-calendar-alt fa-lg"></i>
                         <p class="inner-text">{{ project.name|e }}</p>
                         <input class="form-control-sm" type="text" placeholder="Start typing here to update a project...">
                         <i class="fas fa-plus-square fa-lg"></i>
@@ -28,12 +28,12 @@
                         <i class="fas fa-pencil-alt fa-lg"></i>
                         <i class="fas fa-trash-alt fa-lg"></i>
                     </div>
-                    <div class="task-add">
+                    <div class="task-add input-group input-group-sm">
                         <i class="fas fa-plus fa-2x"></i>
-                        <input class="form-control-sm" type="text" placeholder="Start typing here to create a task...">
-                        <span class="input-group-btn">
-                            <button class="btn btn-info" type="button">Add Task</button>
-                        </span>
+                        <input class="form-control" type="text" placeholder="Start typing here to create a task...">
+                        <div class="input-group-append">
+                            <span class="input-group-text">Add Task</span>
+                        </div>
                     </div>
                     <div id="tasks">
                         {% for task in project.tasks %}
@@ -42,8 +42,11 @@
                                     <input type="checkbox">
                                 </span>
                                 <p class="inner-text">{{ task.name|e }}</p>
-                                <i class="fas fa-sort fa-lg"></i>
+                                <input class="form-control-sm" type="text" placeholder="Start typing here to update a task...">
+                                <i class="fas fa-plus-square fa-lg"></i>
+                                <i class="fa fa-window-close fa-lg"></i>
                                 <i class="fas fa-pencil-alt fa-lg"></i>
+                                <i class="fas fa-sort fa-lg"></i>
                                 <i class="fas fa-trash-alt fa-lg"></i>
                             </div>
                         {% endfor %}
@@ -64,6 +67,21 @@
     {{ parent() }}
     <script>
         $('document').ready(function(){
+            // Add Project
+            $('#add-todo-list').on('click', function(){
+                $.ajax({
+                    url: '/project/create',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(response){
+                        $("#projects").append(response);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
+                    }
+                });
+            });
+
             // Update Project
             $('div.project-name svg.fa-pencil-alt > *').on('click', function(){
                 var id = $(this).closest('div.project').attr('id').split('-')[1];
@@ -96,21 +114,6 @@
                 hideProjectInput(id);
             });
 
-            // Add Project
-            $('#add-todo-list').on('click', function(){
-                $.ajax({
-                    url: '/project/create',
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function(response){
-                        $("#projects").append(response);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown){
-                        alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
-                    }
-                });
-            });
-
             // Delete Project
             $('div.project-name svg.fa-trash-alt > *').on('click', function(){
                 var id = $(this).closest('div.project').attr('id').split('-')[1];
@@ -126,8 +129,6 @@
                     }
                 });
             });
-
-            // Update Task
 
             // Add Task
             $('div.task-add button').on('click', function(){
@@ -150,6 +151,8 @@
                 }
                 alert('Please enter a task name!');
             });
+
+            // Update Task
 
             // Delete Task
             $('div.task svg.fa-trash-alt > *').on('click', function(){
