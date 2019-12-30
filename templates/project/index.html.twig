@@ -82,54 +82,18 @@
                 });
             });
 
-
-
-            // Update Project
-            // $('div.project-name svg.fa-pencil-alt > *').on('click', function(){
-            //     var id = $(this).closest('div.project').attr('id').split('-')[1];
-            //     showProjectInput(id);
-            // });
-            // $('div.project-name svg.fa-plus-square > *').on('click', function(){
-            //     var id = $(this).closest('div.project').attr('id').split('-')[1];
-            //     var value = $(this).parent().prev().val();
-            //     if (value) {
-            //         $.ajax({
-            //             url: '/project/update',
-            //             method: 'POST',
-            //             dataType: 'json',
-            //             data: {project_id: id, project_name: value},
-            //             success: function(response){
-            //                 $('#project-'+id+' div.project-name p').text(value);
-            //                 hideProjectInput(id);
-            //             },
-            //             error: function(jqXHR, textStatus, errorThrown){
-            //                 hideProjectInput(id);
-            //                 alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
-            //             }
-            //         });
-            //         return;
-            //     }
-            //     alert('Please enter a project name!');
-            // });
-            // $('div.project-name svg.fa-window-close > *').on('click', function(){
-            //     var id = $(this).closest('div.project').attr('id').split('-')[1];
-            //     hideProjectInput(id);
-            // });
-
-
-
             // Add Task
             $(document).on('click', '.task-add span', function(){
                 var id = $(this).closest('.project').data('id');
                 var value = $(this).parent().prev().val();
-                if (value) {
+                if(value){
                     $.ajax({
                         url: '/task/create',
                         method: 'POST',
                         dataType: 'json',
                         data: {project_id: id, task_name: value},
                         success: function(response){
-                            $('.project[data-id="'+id+'"] > #tasks')            .append(response);
+                            $('.project[data-id="'+id+'"] > #tasks').append(response);
                         },
                         error: function(jqXHR, textStatus, errorThrown){
                             alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
@@ -140,7 +104,7 @@
                 alert('Please enter a task name!');
             });
 
-            // Delete Project and Task
+            // Delete Project or Task
             $(document).on('click', '.fa-trash-alt', function(){
                 var entity = $(this).data('entity');
                 var id = $(this).closest('.'+entity).data('id');
@@ -157,22 +121,60 @@
                 });
             });
 
+            // Update Project
+            $(document).on('click', '.project-name .fa-pencil-alt', function(){
+                interactProductInput($(this));
+            });
 
+            $(document).on('click', '.project-name .fa-window-close', function(){
+                interactProductInput($(this));
+            });
 
-            // function showProjectInput(id){
-            //     $('#project-'+id+' div.project-name p').hide();
-            //     $('#project-'+id+' div.project-name svg.fa-pencil-alt').hide();
-            //     $('#project-'+id+' div.project-name input').show();
-            //     $('#project-'+id+' div.project-name svg.fa-plus-square').show();
-            //     $('#project-'+id+' div.project-name svg.fa-window-close').show();
-            // }
-            // function hideProjectInput(id){
-            //     $('#project-'+id+' div.project-name input').hide();
-            //     $('#project-'+id+' div.project-name svg.fa-plus-square').hide();
-            //     $('#project-'+id+' div.project-name svg.fa-window-close').hide();
-            //     $('#project-'+id+' div.project-name p').show();
-            //     $('#project-'+id+' div.project-name svg.fa-pencil-alt').show();
-            // }
+            $(document).on('click', '.project-name .fa-plus-square', function(){
+                var element = $(this);
+                var id = element.closest('.project').data('id');
+                var value = element.siblings('input').val();
+                if(value){
+                    $.ajax({
+                        url: '/project/update',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: {project_id: id, project_name: value},
+                        success: function(response){
+                            element.siblings('p').text(value);
+                            interactProductInput(element);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown){
+                            interactProductInput(element);
+                            alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
+                        }
+                    });
+                    return;
+                }
+                alert('Please enter a project name!');
+            });
+
+            function interactProductInput(object){
+                if(object.hasClass('fa-pencil-alt')){
+                    object.siblings('p').hide();
+                    object.hide();
+                    object.siblings('input').show();
+                    object.siblings('.fa-plus-square').show();
+                    object.siblings('.fa-window-close').show();
+                }else if(object.hasClass('fa-window-close')){
+                    object.siblings('input').hide();
+                    object.siblings('.fa-plus-square').hide();
+                    object.hide();
+                    object.siblings('p').show();
+                    object.siblings('.fa-pencil-alt').show();
+                }else if(object.hasClass('fa-plus-square')){
+                    object.siblings('input').hide();
+                    object.hide();
+                    object.siblings('.fa-window-close').hide();
+                    object.siblings('p').show();
+                    object.siblings('.fa-pencil-alt').show();
+                }
+            }
         });
     </script>
 {% endblock %}
