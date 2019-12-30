@@ -26,7 +26,7 @@
                         <i class="fas fa-plus-square fa-lg"></i>
                         <i class="fa fa-window-close fa-lg"></i>
                         <i class="fas fa-pencil-alt fa-lg"></i>
-                        <i class="fas fa-trash-alt fa-lg"></i>
+                        <i class="fas fa-trash-alt fa-lg" data-entity="project"></i>
                     </div>
                     <div class="task-add input-group input-group-sm">
                         <i class="fas fa-plus fa-2x"></i>
@@ -47,7 +47,7 @@
                                 <i class="fa fa-window-close fa-lg"></i>
                                 <i class="fas fa-pencil-alt fa-lg"></i>
                                 <i class="fas fa-sort fa-lg"></i>
-                                <i class="fas fa-trash-alt fa-lg"></i>
+                                <i class="fas fa-trash-alt fa-lg" data-entity="task"></i>
                             </div>
                         {% endfor %}
                     </div>
@@ -66,9 +66,9 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        $('document').ready(function(){
+        $(function(){
             // Add Project
-            $('#add-todo-list').on('click', function(){
+            $(document).on('click', '#add-todo-list', function(){
                 $.ajax({
                     url: '/project/create',
                     method: 'GET',
@@ -82,57 +82,45 @@
                 });
             });
 
-            // Update Project
-            $('div.project-name svg.fa-pencil-alt > *').on('click', function(){
-                var id = $(this).closest('div.project').attr('id').split('-')[1];
-                showProjectInput(id);
-            });
-            $('div.project-name svg.fa-plus-square > *').on('click', function(){
-                var id = $(this).closest('div.project').attr('id').split('-')[1];
-                var value = $(this).parent().prev().val();
-                if (value) {
-                    $.ajax({
-                        url: '/project/update',
-                        method: 'POST',
-                        dataType: 'json',
-                        data: {project_id: id, project_name: value},
-                        success: function(response){
-                            $('#project-'+id+' div.project-name p').text(value);
-                            hideProjectInput(id);
-                        },
-                        error: function(jqXHR, textStatus, errorThrown){
-                            hideProjectInput(id);
-                            alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
-                        }
-                    });
-                    return;
-                }
-                alert('Please enter a project name!');
-            });
-            $('div.project-name svg.fa-window-close > *').on('click', function(){
-                var id = $(this).closest('div.project').attr('id').split('-')[1];
-                hideProjectInput(id);
-            });
 
-            // Delete Project
-            $('div.project-name svg.fa-trash-alt > *').on('click', function(){
-                var id = $(this).closest('div.project').attr('id').split('-')[1];
-                $.ajax({
-                    url: '/project/delete/'+id,
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function(response){
-                        $('div#project-'+id).remove();
-                    },
-                    error: function(jqXHR, textStatus, errorThrown){
-                        alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
-                    }
-                });
-            });
+
+            // Update Project
+            // $('div.project-name svg.fa-pencil-alt > *').on('click', function(){
+            //     var id = $(this).closest('div.project').attr('id').split('-')[1];
+            //     showProjectInput(id);
+            // });
+            // $('div.project-name svg.fa-plus-square > *').on('click', function(){
+            //     var id = $(this).closest('div.project').attr('id').split('-')[1];
+            //     var value = $(this).parent().prev().val();
+            //     if (value) {
+            //         $.ajax({
+            //             url: '/project/update',
+            //             method: 'POST',
+            //             dataType: 'json',
+            //             data: {project_id: id, project_name: value},
+            //             success: function(response){
+            //                 $('#project-'+id+' div.project-name p').text(value);
+            //                 hideProjectInput(id);
+            //             },
+            //             error: function(jqXHR, textStatus, errorThrown){
+            //                 hideProjectInput(id);
+            //                 alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
+            //             }
+            //         });
+            //         return;
+            //     }
+            //     alert('Please enter a project name!');
+            // });
+            // $('div.project-name svg.fa-window-close > *').on('click', function(){
+            //     var id = $(this).closest('div.project').attr('id').split('-')[1];
+            //     hideProjectInput(id);
+            // });
+
+
 
             // Add Task
-            $('div.task-add button').on('click', function(){
-                var id = $(this).closest('div.project').attr('id').split('-')[1];
+            $(document).on('click', '.task-add span', function(){
+                var id = $(this).closest('.project').data('id');
                 var value = $(this).parent().prev().val();
                 if (value) {
                     $.ajax({
@@ -141,7 +129,7 @@
                         dataType: 'json',
                         data: {project_id: id, task_name: value},
                         success: function(response){
-                            $('#project-'+id+' > #tasks').append(response);
+                            $('.project[data-id="'+id+'"] > #tasks')            .append(response);
                         },
                         error: function(jqXHR, textStatus, errorThrown){
                             alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
@@ -152,17 +140,16 @@
                 alert('Please enter a task name!');
             });
 
-            // Update Task
-
-            // Delete Task
-            $('div.task svg.fa-trash-alt > *').on('click', function(){
-                var id = $(this).closest('div.task').attr('id').split('-')[1];
+            // Delete Project and Task
+            $(document).on('click', '.fa-trash-alt', function(){
+                var entity = $(this).data('entity');
+                var id = $(this).closest('.'+entity).data('id');
                 $.ajax({
-                    url: '/task/delete/'+id,
+                    url: '/'+entity+'/delete/'+id,
                     method: 'GET',
                     dataType: 'json',
                     success: function(response){
-                        $('div#task-'+id).remove();
+                        $('.'+entity+'[data-id="'+id+'"]').remove();
                     },
                     error: function(jqXHR, textStatus, errorThrown){
                         alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
@@ -170,20 +157,22 @@
                 });
             });
 
-            function showProjectInput(id){
-                $('#project-'+id+' div.project-name p').hide();
-                $('#project-'+id+' div.project-name svg.fa-pencil-alt').hide();
-                $('#project-'+id+' div.project-name input').show();
-                $('#project-'+id+' div.project-name svg.fa-plus-square').show();
-                $('#project-'+id+' div.project-name svg.fa-window-close').show();
-            }
-            function hideProjectInput(id){
-                $('#project-'+id+' div.project-name input').hide();
-                $('#project-'+id+' div.project-name svg.fa-plus-square').hide();
-                $('#project-'+id+' div.project-name svg.fa-window-close').hide();
-                $('#project-'+id+' div.project-name p').show();
-                $('#project-'+id+' div.project-name svg.fa-pencil-alt').show();
-            }
+
+
+            // function showProjectInput(id){
+            //     $('#project-'+id+' div.project-name p').hide();
+            //     $('#project-'+id+' div.project-name svg.fa-pencil-alt').hide();
+            //     $('#project-'+id+' div.project-name input').show();
+            //     $('#project-'+id+' div.project-name svg.fa-plus-square').show();
+            //     $('#project-'+id+' div.project-name svg.fa-window-close').show();
+            // }
+            // function hideProjectInput(id){
+            //     $('#project-'+id+' div.project-name input').hide();
+            //     $('#project-'+id+' div.project-name svg.fa-plus-square').hide();
+            //     $('#project-'+id+' div.project-name svg.fa-window-close').hide();
+            //     $('#project-'+id+' div.project-name p').show();
+            //     $('#project-'+id+' div.project-name svg.fa-pencil-alt').show();
+            // }
         });
     </script>
 {% endblock %}

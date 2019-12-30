@@ -16,7 +16,7 @@ class ProjectController extends AbstractController
      */
     public function index()
     {
-        return $this->render('product/index.html.twig', ['user' => $this->getUser()]);
+        return $this->render('project/index.html.twig', ['user' => $this->getUser()]);
     }
 
     /**
@@ -33,7 +33,7 @@ class ProjectController extends AbstractController
         $manager->flush();
 
         return new JsonResponse(
-            $this->render('product/create.html.twig', ['project' => $project])->getContent(),
+            $this->render('project/create.html.twig', ['project' => $project])->getContent(),
             Response::HTTP_OK,
             ['content-type' => 'text/html']
         );
