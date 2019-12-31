@@ -39,6 +39,24 @@ class TaskController extends AbstractController
     }
 
     /**
+     * @Route("/task/update", name="task-update", methods={"POST"})
+     */
+    public function update(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+
+        $task = $manager->getRepository(Task::class)->find($request->request->get('task_id'));
+        if (!$task) {
+            throw $this->createNotFoundException('No task found for id ' . $request->request->get('task_id'));
+        }
+
+        $task->setName($request->request->get('task_name'));
+        $manager->flush();
+
+        return new JsonResponse(null, Response::HTTP_OK);
+    }
+
+    /**
      * @Route("/task/delete/{id}", name="task-delete", methods={"GET"})
      */
     public function delete(int $id)

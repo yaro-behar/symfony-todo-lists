@@ -23,7 +23,7 @@
                         <i class="fas fa-calendar-alt fa-lg"></i>
                         <p class="inner-text">{{ project.name|e }}</p>
                         <input class="form-control-sm" type="text" placeholder="Start typing here to update a project...">
-                        <i class="fas fa-plus-square fa-lg"></i>
+                        <i class="fas fa-plus-square fa-lg" data-entity="project"></i>
                         <i class="fa fa-window-close fa-lg"></i>
                         <i class="fas fa-pencil-alt fa-lg"></i>
                         <i class="fas fa-trash-alt fa-lg" data-entity="project"></i>
@@ -43,7 +43,7 @@
                                 </span>
                                 <p class="inner-text">{{ task.name|e }}</p>
                                 <input class="form-control-sm" type="text" placeholder="Start typing here to update a task...">
-                                <i class="fas fa-plus-square fa-lg"></i>
+                                <i class="fas fa-plus-square fa-lg" data-entity="task"></i>
                                 <i class="fa fa-window-close fa-lg"></i>
                                 <i class="fas fa-pencil-alt fa-lg"></i>
                                 <i class="fas fa-sort fa-lg"></i>
@@ -67,7 +67,7 @@
     {{ parent() }}
     <script>
         $(function(){
-            // Add Project
+            // Add
             $(document).on('click', '#add-todo-list', function(){
                 $.ajax({
                     url: '/project/create',
@@ -82,7 +82,6 @@
                 });
             });
 
-            // Add Task
             $(document).on('click', '.task-add span', function(){
                 var id = $(this).closest('.project').data('id');
                 var value = $(this).parent().prev().val();
@@ -104,7 +103,7 @@
                 alert('Please enter a task name!');
             });
 
-            // Delete Project or Task
+            // Delete
             $(document).on('click', '.fa-trash-alt', function(){
                 var entity = $(this).data('entity');
                 var id = $(this).closest('.'+entity).data('id');
@@ -121,31 +120,35 @@
                 });
             });
 
-            // Update Project
-            $(document).on('click', '.project-name .fa-pencil-alt', function(){
-                interactProductInput($(this));
+            // Update
+            $(document).on('click', '.fa-pencil-alt', function(){
+                showHideInput($(this));
             });
 
-            $(document).on('click', '.project-name .fa-window-close', function(){
-                interactProductInput($(this));
+            $(document).on('click', '.fa-window-close', function(){
+                showHideInput($(this));
             });
 
-            $(document).on('click', '.project-name .fa-plus-square', function(){
+            $(document).on('click', '.fa-plus-square', function(){
                 var element = $(this);
-                var id = element.closest('.project').data('id');
+                var entity = $(this).data('entity');
+                var id = $(this).closest('.'+entity).data('id');
                 var value = element.siblings('input').val();
+                var data = {};
+                data[entity+'_id'] = id;
+                data[entity+'_name'] = value;
                 if(value){
                     $.ajax({
-                        url: '/project/update',
+                        url: '/'+entity+'/update',
                         method: 'POST',
                         dataType: 'json',
-                        data: {project_id: id, project_name: value},
+                        data: data,
                         success: function(response){
                             element.siblings('p').text(value);
-                            interactProductInput(element);
+                            showHideInput(element);
                         },
                         error: function(jqXHR, textStatus, errorThrown){
-                            interactProductInput(element);
+                            showHideInput(element);
                             alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
                         }
                     });
@@ -154,23 +157,23 @@
                 alert('Please enter a project name!');
             });
 
-            function interactProductInput(object){
+            function showHideInput(object){
                 if(object.hasClass('fa-pencil-alt')){
                     object.siblings('p').hide();
                     object.hide();
                     object.siblings('input').show();
                     object.siblings('.fa-plus-square').show();
                     object.siblings('.fa-window-close').show();
-                }else if(object.hasClass('fa-window-close')){
-                    object.siblings('input').hide();
-                    object.siblings('.fa-plus-square').hide();
-                    object.hide();
-                    object.siblings('p').show();
-                    object.siblings('.fa-pencil-alt').show();
                 }else if(object.hasClass('fa-plus-square')){
                     object.siblings('input').hide();
                     object.hide();
                     object.siblings('.fa-window-close').hide();
+                    object.siblings('p').show();
+                    object.siblings('.fa-pencil-alt').show();
+                }else if(object.hasClass('fa-window-close')){
+                    object.siblings('input').hide();
+                    object.siblings('.fa-plus-square').hide();
+                    object.hide();
                     object.siblings('p').show();
                     object.siblings('.fa-pencil-alt').show();
                 }
