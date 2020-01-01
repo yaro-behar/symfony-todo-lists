@@ -38,6 +38,7 @@ div.button {
 .project {
     margin-bottom: 40px;
     border: 1px solid #000000;
+    border-radius: 0 0 10px 10px;
 }
 
 /* Project section */
@@ -68,6 +69,7 @@ div.button {
 
 .task-add {
     padding: 15px 0;
+    background-color: #d1d1d1;
 }
 
 .task-add .fa-plus {

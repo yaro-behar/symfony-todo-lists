@@ -38,8 +38,12 @@
                     <div id="tasks">
                         {% for task in project.tasks %}
                             <div data-id="{{ task.id }}" class="task">
-                                <span class="input-group-addon">
-                                    <input type="checkbox">
+                                <span>
+                                    <input type="checkbox"
+                                           data-original-title="Mark task as"
+                                           data-content="<a href='#' id='{{ task.id }}' class='status-done'>Done</a>"
+                                           data-html="true"
+                                           data-placement="left">
                                 </span>
                                 <p class="inner-text">{{ task.name|e }}</p>
                                 <input class="form-control-sm" type="text" placeholder="Start typing here to update a task...">
@@ -67,7 +71,7 @@
     {{ parent() }}
     <script>
         $(function(){
-            // Add
+            // Add Project
             $(document).on('click', '#add-todo-list', function(){
                 $.ajax({
                     url: '/project/create',
@@ -82,6 +86,7 @@
                 });
             });
 
+            // Add Task
             $(document).on('click', '.task-add span', function(){
                 var id = $(this).closest('.project').data('id');
                 var value = $(this).parent().prev().val();
@@ -103,7 +108,7 @@
                 alert('Please enter a task name!');
             });
 
-            // Delete
+            // Delete Project or Task
             $(document).on('click', '.fa-trash-alt', function(){
                 var entity = $(this).data('entity');
                 var id = $(this).closest('.'+entity).data('id');
@@ -120,7 +125,7 @@
                 });
             });
 
-            // Update
+            // Update Project or Task
             $(document).on('click', '.fa-pencil-alt', function(){
                 showHideInput($(this));
             });
@@ -155,6 +160,20 @@
                     return;
                 }
                 alert('Please enter a project name!');
+            });
+
+            // Mark Task as 'Done'
+            $(document).on('change', 'input[type="checkbox"]', function(){
+                this.checked ? $(this).popover('show') : $(this).popover('hide');
+            });
+
+            $(document).on('click', '.status-done', function(){
+                $(this).parents('.popover').addClass('hide').removeClass('show');
+
+                // TODO: continue
+                // $(this).attr('id');
+                // checkbox uncheck
+                // row disable
             });
 
             function showHideInput(object){
