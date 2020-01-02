@@ -168,12 +168,25 @@
             });
 
             $(document).on('click', '.status-done', function(){
-                $(this).parents('.popover').addClass('hide').removeClass('show');
-
-                // TODO: continue
-                // $(this).attr('id');
-                // checkbox uncheck
-                // row disable
+                var id = $(this).attr('id');
+                var task = 'div.task[data-id="'+id+'"]';
+                var popover = $(this).parents('.popover');
+                $.ajax({
+                    url: '/task/inactivate/'+id,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(response){
+                        popover.addClass('hide').removeClass('show');
+                        $(task+' span input').prop('checked', false);
+                        $(task+' span input').addClass('disabled');
+                        $(task+' p').css('text-decoration', 'line-through');
+                        $(task+' .fa-pencil-alt').addClass('disabled');
+                        $(task+' .fa-sort').addClass('disabled');
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
+                    }
+                });
             });
 
             function showHideInput(object){

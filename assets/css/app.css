@@ -35,13 +35,18 @@ div.button {
     text-align: center;
 }
 
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Project section */
+
 .project {
     margin-bottom: 40px;
     border: 1px solid #000000;
     border-radius: 0 0 10px 10px;
 }
-
-/* Project section */
 
 .project-name {
     padding: 15px 0;

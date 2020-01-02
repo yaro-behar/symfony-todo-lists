@@ -73,4 +73,13 @@ class TaskController extends AbstractController
 
         return new JsonResponse(null, Response::HTTP_OK);
     }
+
+    /**
+     * @Route("/task/inactivate/{id}", name="task-inactivate", methods={"GET"})
+     */
+    public function inactivate(int $id)
+    {
+        // TODO
+        return new JsonResponse(null, Response::HTTP_OK);
+    }
 }
