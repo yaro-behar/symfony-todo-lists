@@ -7,6 +7,9 @@ window.$ = $;
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import 'jquery-datetimepicker/build/jquery.datetimepicker.full.min.js';
+import 'jquery-datetimepicker/build/jquery.datetimepicker.min.css';
+
 import { library, dom } from '@fortawesome/fontawesome-svg-core';
 import {
     faPencilAlt,

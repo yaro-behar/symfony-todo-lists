@@ -1,20 +1,20 @@
 <div data-id="{{ project.id }}" class="project">
     <div class="project-name">
         <i class="fas fa-calendar-alt fa-lg"></i>
-        <p class="inner-text">{{ project.name|e }}</p>
-        <input class="form-control-sm" type="text" placeholder="Start typing here to update a project...">
-        <i class="fas fa-plus-square fa-lg" data-entity="project"></i>
-        <i class="fa fa-window-close fa-lg"></i>
+        <p class="inline">{{ project.name|e }}</p>
+        <input class="form-control-sm hidden" type="text" placeholder="Update project...">
+        <i class="fas fa-plus-square fa-lg hidden" data-entity="project"></i>
+        <i class="fa fa-window-close fa-lg hidden"></i>
         <i class="fas fa-pencil-alt fa-lg"></i>
         <i class="fas fa-trash-alt fa-lg" data-entity="project"></i>
     </div>
     <div class="task-add input-group input-group-sm">
         <i class="fas fa-plus fa-2x"></i>
-        <input class="form-control" type="text" placeholder="Start typing here to create a task...">
+        <input class="form-control" type="text" placeholder="Create a task...">
         <div class="input-group-append">
             <span class="input-group-text">Add Task</span>
         </div>
     </div>
-    <div id="tasks">
+    <div class="tasks">
     </div>
 </div>

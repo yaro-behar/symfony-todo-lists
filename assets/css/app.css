@@ -27,11 +27,11 @@ html, body {
     text-align: center;
 }
 
-p.inner-text {
+.inline {
     display: inline;
 }
 
-div.button {
+.text-centered {
     text-align: center;
 }
 
@@ -39,6 +39,10 @@ div.button {
     opacity: 0.5;
     pointer-events: none;
     text-decoration: line-through;
+}
+
+.hidden {
+    display: none;
 }
 
 /* Project section */
@@ -62,23 +66,20 @@ div.button {
     cursor: pointer;
 }
 
-.project-name p {
+.project-name p, .task p {
     font-family: Verdana, serif;
     font-size: 20px;
-}
-
-.project-name .form-control-sm, .task .form-control-sm, .fa-plus-square, .fa-window-close {
-    display: none;
 }
 
 /* Add task section */
 
 .task-add {
-    padding: 15px 0;
+    padding: 15px;
     background-color: #d1d1d1;
 }
 
 .task-add .fa-plus {
+    margin-right: 15px;
     color: #72A98B;
 }
 

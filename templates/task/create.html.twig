@@ -1,15 +1,15 @@
 <div data-id="{{ task.id }}" class="task">
-    <span>
-        <input type="checkbox"
-               data-original-title="Mark task as"
-               data-content="<a href='#' id='{{ task.id }}' class='status-done'>Done</a>"
-               data-html="true"
-               data-placement="left">
-    </span>
-    <p class="inner-text">{{ task.name|e }}</p>
-    <input class="form-control-sm" type="text" placeholder="Start typing here to update a task...">
-    <i class="fas fa-plus-square fa-lg" data-entity="task"></i>
-    <i class="fa fa-window-close fa-lg"></i>
+    <input data-toggle="popover"
+           type="checkbox"
+           data-original-title="Mark task as"
+           data-content="<a href='#' id='{{ task.id }}' class='status-done'>Done</a>"
+           data-html="true"
+           data-placement="left">
+    <p class="inline">{{ task.name|e }}</p>
+    <input class="form-control-sm hidden" type="text" placeholder="Update task...">
+    <input class="datetimepicker form-control-sm hidden" type="text" placeholder="Сhoose deadline...">
+    <i class="fas fa-plus-square fa-lg hidden" data-entity="task"></i>
+    <i class="fa fa-window-close fa-lg hidden"></i>
     <i class="fas fa-pencil-alt fa-lg"></i>
     <i class="fas fa-sort fa-lg"></i>
     <i class="fas fa-trash-alt fa-lg" data-entity="task"></i>

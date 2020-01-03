@@ -76,7 +76,7 @@ class Task
 
     public function isStatusActive(): bool
     {
-        return $this->status == 1;
+        return $this->status == self::STATUS_ACTIVE;
     }
 
     public function getDeadline(): ?\DateTimeInterface
