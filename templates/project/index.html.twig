@@ -38,20 +38,30 @@
                     <div id="tasks">
                         {% for task in project.tasks %}
                             <div data-id="{{ task.id }}" class="task">
-                                <span>
-                                    <input type="checkbox"
-                                           data-original-title="Mark task as"
-                                           data-content="<a href='#' id='{{ task.id }}' class='status-done'>Done</a>"
-                                           data-html="true"
-                                           data-placement="left">
-                                </span>
-                                <p class="inner-text">{{ task.name|e }}</p>
-                                <input class="form-control-sm" type="text" placeholder="Start typing here to update a task...">
-                                <i class="fas fa-plus-square fa-lg" data-entity="task"></i>
-                                <i class="fa fa-window-close fa-lg"></i>
-                                <i class="fas fa-pencil-alt fa-lg"></i>
-                                <i class="fas fa-sort fa-lg"></i>
-                                <i class="fas fa-trash-alt fa-lg" data-entity="task"></i>
+                                {% if task.isStatusActive() %}
+                                    <span>
+                                        <input type="checkbox"
+                                               data-original-title="Mark task as"
+                                               data-content="<a href='#' id='{{ task.id }}' class='status-done'>Done</a>"
+                                               data-html="true"
+                                               data-placement="left">
+                                    </span>
+                                    <p class="inner-text">{{ task.name|e }}</p>
+                                    <input class="form-control-sm" type="text" placeholder="Start typing here to update a task...">
+                                    <i class="fas fa-plus-square fa-lg" data-entity="task"></i>
+                                    <i class="fa fa-window-close fa-lg"></i>
+                                    <i class="fas fa-pencil-alt fa-lg"></i>
+                                    <i class="fas fa-sort fa-lg"></i>
+                                    <i class="fas fa-trash-alt fa-lg" data-entity="task"></i>
+                                {% else %}
+                                    <span>
+                                        <input class="disabled" type="checkbox">
+                                    </span>
+                                    <p class="inner-text disabled">{{ task.name|e }}</p>
+                                    <i class="fas fa-pencil-alt fa-lg disabled"></i>
+                                    <i class="fas fa-sort fa-lg disabled"></i>
+                                    <i class="fas fa-trash-alt fa-lg" data-entity="task"></i>
+                                {% endif %}
                             </div>
                         {% endfor %}
                     </div>
@@ -179,7 +189,7 @@
                         popover.addClass('hide').removeClass('show');
                         $(task+' span input').prop('checked', false);
                         $(task+' span input').addClass('disabled');
-                        $(task+' p').css('text-decoration', 'line-through');
+                        $(task+' p').addClass('disabled');
                         $(task+' .fa-pencil-alt').addClass('disabled');
                         $(task+' .fa-sort').addClass('disabled');
                     },

@@ -1,6 +1,10 @@
 <div data-id="{{ task.id }}" class="task">
-    <span class="input-group-addon">
-        <input type="checkbox">
+    <span>
+        <input type="checkbox"
+               data-original-title="Mark task as"
+               data-content="<a href='#' id='{{ task.id }}' class='status-done'>Done</a>"
+               data-html="true"
+               data-placement="left">
     </span>
     <p class="inner-text">{{ task.name|e }}</p>
     <input class="form-control-sm" type="text" placeholder="Start typing here to update a task...">

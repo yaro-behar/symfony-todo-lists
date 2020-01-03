@@ -38,6 +38,7 @@ div.button {
 .disabled {
     opacity: 0.5;
     pointer-events: none;
+    text-decoration: line-through;
 }
 
 /* Project section */

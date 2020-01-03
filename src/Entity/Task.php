@@ -27,7 +27,7 @@ class Task
     /**
      * @ORM\Column(type="smallint", nullable=false, options={"unsigned":true, "default":1})
      */
-    private $is_active = self::STATUS_ACTIVE;
+    private $status = self::STATUS_ACTIVE;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -62,16 +62,21 @@ class Task
         return $this;
     }
 
-    public function getIsActive(): ?int
+    public function getStatus(): ?int
     {
-        return $this->is_active;
+        return $this->status;
     }
 
-    public function setIsActive(int $is_active): self
+    public function setStatus(int $status): self
     {
-        $this->is_active = $is_active;
+        $this->status = $status;
 
         return $this;
+    }
+
+    public function isStatusActive(): bool
+    {
+        return $this->status == 1;
     }
 
     public function getDeadline(): ?\DateTimeInterface

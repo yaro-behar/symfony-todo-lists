@@ -79,7 +79,16 @@ class TaskController extends AbstractController
      */
     public function inactivate(int $id)
     {
-        // TODO
+        $manager = $this->getDoctrine()->getManager();
+
+        $task = $manager->getRepository(Task::class)->find($id);
+        if (!$task) {
+            throw $this->createNotFoundException('No task found for id ' . $id);
+        }
+
+        $task->setStatus(Task::STATUS_INACTIVE);
+        $manager->flush();
+
         return new JsonResponse(null, Response::HTTP_OK);
     }
 }
