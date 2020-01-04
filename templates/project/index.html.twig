@@ -113,8 +113,9 @@
                         method: 'POST',
                         dataType: 'json',
                         data: {project_id: id, task_name: value},
+                        async: false,
                         success: function(response){
-                            var picker = response.find('input[data-target^="picker"]').attr('data-target');
+                            var picker = $(response).find('input[data-target^="picker"]').attr('data-target');
                             $('.project[data-id="'+id+'"] > .tasks').append(response);
                             $('input[data-target="'+picker+'"]').datetimepicker({
                                 lang: 'en',
@@ -173,6 +174,7 @@
                         method: 'POST',
                         dataType: 'json',
                         data: {project_id: id, project_name: value},
+                        async: false,
                         success: function(response){
                             elem.text(value);
                         },
@@ -191,12 +193,34 @@
             });
 
             $(document).on('click', '.fa-plus-square[data-entity="task"]', function(){
-                // TODO
-                // var id = $(this).closest('.task').data('id');
-                // var inputValue = $(this).siblings('input[data-target="input"]').val();
-                // var pickerValue = $(this).siblings('input[data-target="picker"]').datetimepicker('getValue');
-                // console.log(inputValue);
-                // console.log(pickerValue.getFullYear());
+                var id = $(this).closest('.task').data('id');
+                var inputValue = $(this).siblings('input[data-target="input"]').val();
+                var pickerValue = $(this).siblings('input[data-target="picker'+id+'"]').datetimepicker('getValue');
+
+                var year = '' + pickerValue.getFullYear();
+                var month = '' + (pickerValue.getMonth() + 1);
+                var day = '' + pickerValue.getDate();
+                if(month.length < 2){
+                    month = '0' + month;
+                }
+                if(day.length < 2){
+                    day = '0' + day;
+                }
+                var date = [year, month, day].join('-');
+
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0');
+                var yyyy = today.getFullYear();
+                today = [yyyy, mm, dd].join('-');
+
+                console.log(date);
+                console.log(today);
+                console.log(date == today);
+                console.log(date === today);
+
+                // 'YYYY-MM-DD'
+                // '1000-01-01' - '9999-12-31'
             });
 
             // Mark Task as 'Done'
@@ -211,21 +235,34 @@
                     url: '/task/inactivate/'+id,
                     method: 'GET',
                     dataType: 'json',
+                    async: false,
                     success: function(response){
-                        elem.siblings('input[data-toggle="popover"]').prop('checked', false).addClass('disabled');
-                        elem.siblings('p').addClass('disabled');
-                        elem.siblings('.fa-pencil-alt').addClass('disabled');
-                        elem.siblings('.fa-sort').addClass('disabled');
+                        elem.find('input[data-toggle="popover"]').prop('checked', false).addClass('disabled');
+                        elem.find('p').addClass('disabled');
+                        elem.find('.fa-pencil-alt').addClass('disabled');
+                        elem.find('.fa-sort').addClass('disabled');
                     },
                     error: function(jqXHR, textStatus, errorThrown){
                         alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
                     }
                 });
                 $(this).parents('.popover').addClass('hide').removeClass('show');
-                elem.siblings('.hidden').hide();
-                elem.siblings('p').show();
-                elem.siblings('.fa-pencil-alt').show();
+                elem.find('.hidden').hide();
+                elem.find('p').show();
+                elem.find('.fa-pencil-alt').show();
             });
+
+            function formatDate(date){
+                var d = new Date(date),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
+                if (month.length < 2)
+                    month = '0' + month;
+                if (day.length < 2)
+                    day = '0' + day;
+                return [year, month, day].join('-');
+            }
         });
     </script>
 {% endblock %}

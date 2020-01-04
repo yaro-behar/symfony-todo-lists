@@ -30,7 +30,7 @@ class Task
     private $status = self::STATUS_ACTIVE;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="date", nullable=true)
      */
     private $deadline;
 
