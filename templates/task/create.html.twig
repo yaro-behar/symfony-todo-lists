@@ -6,8 +6,8 @@
            data-html="true"
            data-placement="left">
     <p class="inline">{{ task.name|e }}</p>
-    <input class="form-control-sm hidden" type="text" placeholder="Update task...">
-    <input class="datetimepicker form-control-sm hidden" type="text" placeholder="Сhoose deadline...">
+    <input class="form-control-sm hidden" type="text" data-target="input" placeholder="Update task...">
+    <input class="form-control-sm hidden" type="text" data-target="picker{{ task.id }}" placeholder="Сhoose deadline...">
     <i class="fas fa-plus-square fa-lg hidden" data-entity="task"></i>
     <i class="fa fa-window-close fa-lg hidden"></i>
     <i class="fas fa-pencil-alt fa-lg"></i>

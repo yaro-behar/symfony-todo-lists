@@ -22,7 +22,7 @@
                     <div class="project-name">
                         <i class="fas fa-calendar-alt fa-lg"></i>
                         <p class="inline">{{ project.name|e }}</p>
-                        <input class="form-control-sm hidden" type="text" placeholder="Update project...">
+                        <input class="form-control-sm hidden" type="text" data-target="input" placeholder="Update project...">
                         <i class="fas fa-plus-square fa-lg hidden" data-entity="project"></i>
                         <i class="fa fa-window-close fa-lg hidden"></i>
                         <i class="fas fa-pencil-alt fa-lg"></i>
@@ -46,8 +46,8 @@
                                            data-html="true"
                                            data-placement="left">
                                     <p class="inline">{{ task.name|e }}</p>
-                                    <input class="form-control-sm hidden" type="text" placeholder="Update task...">
-                                    <input class="datetimepicker form-control-sm hidden" type="text" placeholder="Сhoose deadline...">
+                                    <input class="form-control-sm hidden" type="text" data-target="input" placeholder="Update task...">
+                                    <input class="form-control-sm hidden" type="text" data-target="picker{{ task.id }}" placeholder="Сhoose deadline...">
                                     <i class="fas fa-plus-square fa-lg hidden" data-entity="task"></i>
                                     <i class="fa fa-window-close fa-lg hidden"></i>
                                     <i class="fas fa-pencil-alt fa-lg"></i>
@@ -80,16 +80,13 @@
     <script>
         $(function(){
             // Сhoose Deadline
-            // $('.datetimepicker').each(function(){
-            //     $(this).datetimepicker({
-            //         lang: 'en',
-            //         timepicker: false,
-            //         format: 'Y/m/d',
-            //         onSelectDate: function(currentTime, $input){
-            //             console.log($input.val());
-            //         }
-            //     });
-            // });
+            $('input[data-target^="picker"]').each(function(){
+                $(this).datetimepicker({
+                    lang: 'en',
+                    timepicker: false,
+                    format: 'Y/m/d'
+                });
+            });
 
             // Add Project
             $(document).on('click', '#add-todo-list', function(){
@@ -109,21 +106,27 @@
             // Add Task
             $(document).on('click', '.task-add span', function(){
                 var id = $(this).closest('.project').data('id');
-                var input = $(this).parent().prev();
-                if(input.val()){
+                var value = $(this).parent().prev().val();
+                if(value){
                     $.ajax({
                         url: '/task/create',
                         method: 'POST',
                         dataType: 'json',
-                        data: {project_id: id, task_name: input.val()},
+                        data: {project_id: id, task_name: value},
                         success: function(response){
+                            var picker = response.find('input[data-target^="picker"]').attr('data-target');
                             $('.project[data-id="'+id+'"] > .tasks').append(response);
+                            $('input[data-target="'+picker+'"]').datetimepicker({
+                                lang: 'en',
+                                timepicker: false,
+                                format: 'Y/m/d'
+                            });
                         },
                         error: function(jqXHR, textStatus, errorThrown){
                             alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
                         }
                     });
-                    input.val('');
+                    $(this).parent().prev().val('');
                     return;
                 }
                 alert('Please enter a task name!');
@@ -148,40 +151,53 @@
 
             // Update Project or Task
             $(document).on('click', '.fa-pencil-alt', function(){
-                showHideInput($(this));
+                $(this).siblings('p').hide();
+                $(this).hide();
+                $(this).siblings('.hidden').show();
             });
 
             $(document).on('click', '.fa-window-close', function(){
-                showHideInput($(this));
+                $(this).siblings('.hidden').hide();
+                $(this).hide();
+                $(this).siblings('p').show();
+                $(this).siblings('.fa-pencil-alt').show();
             });
 
-            // $(document).on('click', '.fa-plus-square', function(){
-            //     var element = $(this);
-            //     var entity = $(this).data('entity');
-            //     var id = $(this).closest('.'+entity).data('id');
-            //     var value = element.siblings('input').val();
-            //     var data = {};
-            //     data[entity+'_id'] = id;
-            //     data[entity+'_name'] = value;
-            //     if(value){
-            //         $.ajax({
-            //             url: '/'+entity+'/update',
-            //             method: 'POST',
-            //             dataType: 'json',
-            //             data: data,
-            //             success: function(response){
-            //                 element.siblings('p').text(value);
-            //                 showHideInput(element);
-            //             },
-            //             error: function(jqXHR, textStatus, errorThrown){
-            //                 showHideInput(element);
-            //                 alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
-            //             }
-            //         });
-            //         return;
-            //     }
-            //     alert('Please enter a project name!');
-            // });
+            $(document).on('click', '.fa-plus-square[data-entity="project"]', function(){
+                var id = $(this).closest('.project').data('id');
+                var value = $(this).siblings('input[data-target="input"]').val();
+                var elem = $(this).siblings('p');
+                if(value){
+                    $.ajax({
+                        url: '/project/update',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: {project_id: id, project_name: value},
+                        success: function(response){
+                            elem.text(value);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown){
+                            alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
+                        }
+                    });
+                    $(this).siblings('input[data-target="input"]').val('');
+                    $(this).siblings('.hidden').hide();
+                    $(this).hide();
+                    $(this).siblings('p').show();
+                    $(this).siblings('.fa-pencil-alt').show();
+                    return;
+                }
+                alert('Please enter a project name!');
+            });
+
+            $(document).on('click', '.fa-plus-square[data-entity="task"]', function(){
+                // TODO
+                // var id = $(this).closest('.task').data('id');
+                // var inputValue = $(this).siblings('input[data-target="input"]').val();
+                // var pickerValue = $(this).siblings('input[data-target="picker"]').datetimepicker('getValue');
+                // console.log(inputValue);
+                // console.log(pickerValue.getFullYear());
+            });
 
             // Mark Task as 'Done'
             $(document).on('change', 'input[type="checkbox"]', function(){
@@ -190,44 +206,26 @@
 
             $(document).on('click', '.status-done', function(){
                 var id = $(this).attr('id');
-                var task = '.task[data-id="'+id+'"]';
-                var popover = $(this).parents('.popover');
+                var elem = $('.task[data-id="'+id+'"]');
                 $.ajax({
                     url: '/task/inactivate/'+id,
                     method: 'GET',
                     dataType: 'json',
                     success: function(response){
-                        showHideInput($(task+' .fa-plus-square'));
-                        popover.addClass('hide').removeClass('show');
-                        $(task+' input[data-toggle="popover"]').prop('checked', false);
-                        $(task+' input[data-toggle="popover"]').addClass('disabled');
-                        $(task+' p').addClass('disabled');
-                        $(task+' .fa-pencil-alt').addClass('disabled');
-                        $(task+' .fa-sort').addClass('disabled');
+                        elem.siblings('input[data-toggle="popover"]').prop('checked', false).addClass('disabled');
+                        elem.siblings('p').addClass('disabled');
+                        elem.siblings('.fa-pencil-alt').addClass('disabled');
+                        elem.siblings('.fa-sort').addClass('disabled');
                     },
                     error: function(jqXHR, textStatus, errorThrown){
                         alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
                     }
                 });
+                $(this).parents('.popover').addClass('hide').removeClass('show');
+                elem.siblings('.hidden').hide();
+                elem.siblings('p').show();
+                elem.siblings('.fa-pencil-alt').show();
             });
-
-            function showHideInput(object){
-                if(object.hasClass('fa-pencil-alt')){
-                    object.siblings('p').hide();
-                    object.hide();
-                    object.siblings('.hidden').show();
-                }else if(object.hasClass('fa-plus-square')){
-                    object.siblings('.hidden').hide();
-                    object.hide();
-                    object.siblings('p').show();
-                    object.siblings('.fa-pencil-alt').show();
-                }else if(object.hasClass('fa-window-close')){
-                    object.siblings('.hidden').hide();
-                    object.hide();
-                    object.siblings('p').show();
-                    object.siblings('.fa-pencil-alt').show();
-                }
-            }
         });
     </script>
 {% endblock %}
