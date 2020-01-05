@@ -81,11 +81,7 @@
         $(function(){
             // Сhoose Deadline
             $('input[data-target^="picker"]').each(function(){
-                $(this).datetimepicker({
-                    lang: 'en',
-                    timepicker: false,
-                    format: 'Y/m/d'
-                });
+                $(this).datepicker();
             });
 
             // Add Project
@@ -117,11 +113,7 @@
                         success: function(response){
                             var picker = $(response).find('input[data-target^="picker"]').attr('data-target');
                             $('.project[data-id="'+id+'"] > .tasks').append(response);
-                            $('input[data-target="'+picker+'"]').datetimepicker({
-                                lang: 'en',
-                                timepicker: false,
-                                format: 'Y/m/d'
-                            });
+                            $('input[data-target="'+picker+'"]').datepicker();
                         },
                         error: function(jqXHR, textStatus, errorThrown){
                             alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
@@ -194,33 +186,13 @@
 
             $(document).on('click', '.fa-plus-square[data-entity="task"]', function(){
                 var id = $(this).closest('.task').data('id');
-                var inputValue = $(this).siblings('input[data-target="input"]').val();
-                var pickerValue = $(this).siblings('input[data-target="picker'+id+'"]').datetimepicker('getValue');
+                var value = $(this).siblings('input[data-target="input"]').val();
+                var deadline = formatDate($(this).siblings('input[data-target^="picker"]').datepicker('getDate'));
+                var today = formatDate(new Date);
 
-                var year = '' + pickerValue.getFullYear();
-                var month = '' + (pickerValue.getMonth() + 1);
-                var day = '' + pickerValue.getDate();
-                if(month.length < 2){
-                    month = '0' + month;
-                }
-                if(day.length < 2){
-                    day = '0' + day;
-                }
-                var date = [year, month, day].join('-');
-
-                var today = new Date();
-                var dd = String(today.getDate()).padStart(2, '0');
-                var mm = String(today.getMonth() + 1).padStart(2, '0');
-                var yyyy = today.getFullYear();
-                today = [yyyy, mm, dd].join('-');
-
-                console.log(date);
+                // TODO
+                console.log(deadline);
                 console.log(today);
-                console.log(date == today);
-                console.log(date === today);
-
-                // 'YYYY-MM-DD'
-                // '1000-01-01' - '9999-12-31'
             });
 
             // Mark Task as 'Done'
@@ -253,14 +225,9 @@
             });
 
             function formatDate(date){
-                var d = new Date(date),
-                    month = '' + (d.getMonth() + 1),
-                    day = '' + d.getDate(),
-                    year = d.getFullYear();
-                if (month.length < 2)
-                    month = '0' + month;
-                if (day.length < 2)
-                    day = '0' + day;
+                var year = String(date.getFullYear());
+                var month = String(date.getMonth() + 1).padStart(2, '0');
+                var day = String(date.getDate()).padStart(2, '0');
                 return [year, month, day].join('-');
             }
         });
