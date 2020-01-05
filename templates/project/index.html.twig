@@ -187,12 +187,34 @@
             $(document).on('click', '.fa-plus-square[data-entity="task"]', function(){
                 var id = $(this).closest('.task').data('id');
                 var value = $(this).siblings('input[data-target="input"]').val();
-                var deadline = formatDate($(this).siblings('input[data-target^="picker"]').datepicker('getDate'));
-                var today = formatDate(new Date);
-
+                var deadline = $(this).siblings('input[data-target^="picker"]').datepicker('getDate');
+                var elem = $(this).siblings('p');
+                if(!value && !deadline){
+                    alert('Please enter a task name or a deadline!');
+                    return;
+                }
+                if(deadline){
+                    deadline = formatDate(deadline);
+                    var today = formatDate(new Date);
+                    if(deadline < today){
+                        alert('Please enter a future deadline!');
+                        return;
+                    }
+                }
+                $.ajax({
+                    url: '/task/update',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {task_id: id, task_name: value, task_deadline: deadline},
+                    async: false,
+                    success: function(response){
+                        elem.text(value);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
+                    }
+                });
                 // TODO
-                console.log(deadline);
-                console.log(today);
             });
 
             // Mark Task as 'Done'

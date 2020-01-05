@@ -50,7 +50,8 @@ class TaskController extends AbstractController
             throw $this->createNotFoundException('No task found for id ' . $request->request->get('task_id'));
         }
 
-        $task->setName($request->request->get('task_name'));
+        !empty($name = $request->request->get('task_name')) && $task->setName($name);
+        !empty($deadline = $request->request->get('task_deadline')) && $task->setDeadline(date_create_from_format('Y-m-d', $deadline));
         $manager->flush();
 
         return new JsonResponse(null, Response::HTTP_OK);
