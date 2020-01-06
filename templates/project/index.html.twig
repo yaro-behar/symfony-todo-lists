@@ -47,7 +47,18 @@
                                            data-placement="left">
                                     <p class="inline">{{ task.name|e }}</p>
                                     <input class="form-control-sm hidden" type="text" data-target="input" placeholder="Update task...">
-                                    <input class="form-control-sm hidden" type="text" data-target="picker{{ task.id }}" placeholder="Сhoose deadline...">
+                                    {% if task.deadline %}
+                                        <input class="form-control-sm hidden"
+                                           type="text"
+                                           data-date="{{ task.deadline|date('Y-m-d') }}"
+                                           data-target="picker{{ task.id }}"
+                                           placeholder="Сhoose deadline...">
+                                    {% else %}
+                                        <input class="form-control-sm hidden"
+                                           type="text"
+                                           data-target="picker{{ task.id }}"
+                                           placeholder="Сhoose deadline...">
+                                    {% endif %}
                                     <i class="fas fa-plus-square fa-lg hidden" data-entity="task"></i>
                                     <i class="fa fa-window-close fa-lg hidden"></i>
                                     <i class="fas fa-pencil-alt fa-lg"></i>
@@ -81,7 +92,13 @@
         $(function(){
             // Сhoose Deadline
             $('input[data-target^="picker"]').each(function(){
-                $(this).datepicker();
+                $(this).datepicker({
+                    dateFormat: 'yy-mm-dd'
+                });
+                var date = $(this).attr('data-date');
+                if (typeof date !== typeof undefined && date !== false) {
+                    $(this).datepicker('setDate', date);
+                }
             });
 
             // Add Project
@@ -113,7 +130,9 @@
                         success: function(response){
                             var picker = $(response).find('input[data-target^="picker"]').attr('data-target');
                             $('.project[data-id="'+id+'"] > .tasks').append(response);
-                            $('input[data-target="'+picker+'"]').datepicker();
+                            $('input[data-target="'+picker+'"]').datepicker({
+                                dateFormat: 'yy-mm-dd'
+                            });
                         },
                         error: function(jqXHR, textStatus, errorThrown){
                             alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
@@ -208,7 +227,7 @@
                     data: {task_id: id, task_name: value, task_deadline: deadline},
                     async: false,
                     success: function(response){
-                        elem.text(value);
+                        // TODO
                     },
                     error: function(jqXHR, textStatus, errorThrown){
                         alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);

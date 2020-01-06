@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TaskRepository")
+ * @ORM\EntityListeners({"App\EventListener\TaskChangedStatus"})
  */
 class Task
 {
