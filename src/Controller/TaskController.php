@@ -43,7 +43,6 @@ class TaskController extends AbstractController
      */
     public function update(Request $request)
     {
-        // TODO
         $manager = $this->getDoctrine()->getManager();
 
         $task = $manager->getRepository(Task::class)->find($request->request->get('task_id'));
@@ -51,15 +50,20 @@ class TaskController extends AbstractController
             throw $this->createNotFoundException('No task found for id ' . $request->request->get('task_id'));
         }
 
+        if (!$task->isStatusActive()) {
+            return new JsonResponse(['status' => 'inactive'], Response::HTTP_OK);
+        }
+
         if (!empty($request->request->get('task_name'))) {
             $task->setName($request->request->get('task_name'));
         }
         if (!empty($request->request->get('task_deadline'))) {
-            $task->setDeadline($request->request->get('task_deadline'));
+            $deadline = \DateTime::createFromFormat('Y-m-d', $request->request->get('task_deadline'));
+            $task->setDeadline($deadline);
         }
         $manager->flush();
 
-        return new JsonResponse(null, Response::HTTP_OK);
+        return new JsonResponse(['status' => 'active'], Response::HTTP_OK);
     }
 
     /**

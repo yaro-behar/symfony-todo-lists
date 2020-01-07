@@ -12,12 +12,13 @@ class TaskChangedStatus
         $manager = $event->getObjectManager();
 
         $deadline = $task->getDeadline();
-        $dateTime = new \DateTime();
-
-        if ($deadline instanceof \DateTimeInterface && $deadline->format('Y-m-d') < $dateTime->format('Y-m-d')) {
-            $task->setStatus(Task::STATUS_INACTIVE);
-            $manager->persist($task);
-            $manager->flush();
+        if ($deadline instanceof \DateTimeInterface) {
+            $dateTime = new \DateTime();
+            if ($deadline->format('Y-m-d') < $dateTime->format('Y-m-d')) {
+                $task->setStatus(Task::STATUS_INACTIVE);
+                $manager->persist($task);
+                $manager->flush();
+            }
         }
     }
 }

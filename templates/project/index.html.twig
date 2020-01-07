@@ -207,7 +207,9 @@
                 var id = $(this).closest('.task').data('id');
                 var value = $(this).siblings('input[data-target="input"]').val();
                 var deadline = $(this).siblings('input[data-target^="picker"]').datepicker('getDate');
-                var elem = $(this).siblings('p');
+                var paragraph  = $(this).siblings('p');
+                var input = $(this).siblings('input[data-target^="picker"]');
+                var status = true; // Status Active
                 if(!value && !deadline){
                     alert('Please enter a task name or a deadline!');
                     return;
@@ -227,13 +229,37 @@
                     data: {task_id: id, task_name: value, task_deadline: deadline},
                     async: false,
                     success: function(response){
-                        // TODO
+                        if(response.status == 'inactive'){
+                            status = false;
+                        }else if(response.status == 'active'){
+                            if(value){
+                                paragraph.text(value);
+                            }
+                            if(deadline){
+                                input.datepicker('setDate', deadline);
+                            }
+                        }
                     },
                     error: function(jqXHR, textStatus, errorThrown){
                         alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
                     }
                 });
-                // TODO
+                $(this).siblings('.hidden').hide();
+                $(this).hide();
+                $(this).siblings('p').show();
+                $(this).siblings('.fa-pencil-alt').show();
+                if(status){
+                    $(this).siblings('input[data-target="input"]').val('');
+                }else{
+                    $(this).siblings('input[data-toggle="popover"]').prop('checked', false).addClass('disabled');
+                    $(this).siblings('p').addClass('disabled');
+                    $(this).siblings('.fa-pencil-alt').addClass('disabled');
+                    $(this).siblings('.fa-sort').addClass('disabled');
+                    $(this).siblings('input[data-target="input"]').remove();
+                    $(this).siblings('input[data-target^="picker"]').remove();
+                    $(this).siblings('.fa-plus-square').remove();
+                    $(this).siblings('.fa-window-close').remove();
+                }
             });
 
             // Mark Task as 'Done'
@@ -254,6 +280,10 @@
                         elem.find('p').addClass('disabled');
                         elem.find('.fa-pencil-alt').addClass('disabled');
                         elem.find('.fa-sort').addClass('disabled');
+                        elem.find('input[data-target="input"]').remove();
+                        elem.find('input[data-target^="picker"]').remove();
+                        elem.find('.fa-plus-square').remove();
+                        elem.find('.fa-window-close').remove();
                     },
                     error: function(jqXHR, textStatus, errorThrown){
                         alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
