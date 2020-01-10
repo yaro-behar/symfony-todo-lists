@@ -90,10 +90,11 @@
     {{ parent() }}
     <script>
         $(function(){
-            // TODO
             // Sort Tasks
-            $('.sortable').sortable({
-                axis: 'y'
+            $('.sortable').each(function(){
+                $(this).sortable({
+                    axis: 'y'
+                });
             });
 
             // Сhoose Deadline
@@ -114,7 +115,11 @@
                     method: 'GET',
                     dataType: 'json',
                     success: function(response){
+                        var id = $(response).filter('.project').attr('data-id');
                         $("#projects").append(response);
+                        $('.project[data-id="'+id+'"] .sortable').sortable({
+                            axis: 'y'
+                        });
                     },
                     error: function(jqXHR, textStatus, errorThrown){
                         alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
@@ -139,6 +144,7 @@
                             $('input[data-target="'+picker+'"]').datepicker({
                                 dateFormat: 'yy-mm-dd'
                             });
+                            $('.project[data-id="'+id+'"] .sortable').sortable('refresh');
                         },
                         error: function(jqXHR, textStatus, errorThrown){
                             alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
