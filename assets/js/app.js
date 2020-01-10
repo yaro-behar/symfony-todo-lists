@@ -5,6 +5,7 @@ window.jQuery = $;
 window.$ = $;
 
 import 'jquery-ui/ui/widgets/datepicker.js';
+import 'jquery-ui/ui/widgets/sortable.js';
 import 'jquery-ui/themes/base/all.css';
 
 import 'bootstrap/dist/js/bootstrap.min.js';

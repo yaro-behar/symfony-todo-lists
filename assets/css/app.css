@@ -45,25 +45,36 @@ html, body {
     display: none;
 }
 
+.fa-plus-square, .fa-window-close, .fa-pencil-alt, .fa-trash-alt {
+    cursor: pointer;
+}
+
+.fa-pencil-alt, .fa-trash-alt {
+    float: right;
+}
+
+.fa-calendar-alt, .fa-sort, .fa-trash-alt {
+    margin: 0 20px;
+}
+
+input[data-toggle="popover"] {
+    margin-right: 20px;
+}
+
 /* Project section */
 
 .project {
     margin-bottom: 40px;
-    border: 1px solid #000000;
-    border-radius: 0 0 10px 10px;
 }
 
 .project-name {
     padding: 15px 0;
     background-color: #416EAB;
+    border: 1px solid #000000;
 }
 
 .project-name .fa-calendar-alt, .project-name p, .project-name .fa-plus-square, .project-name .fa-window-close, .project-name .fa-pencil-alt, .project-name .fa-trash-alt {
     color: #ffffff;
-}
-
-.fa-plus-square, .fa-window-close, .fa-pencil-alt, .fa-sort, .fa-trash-alt {
-    cursor: pointer;
 }
 
 .project-name p, .task p {
@@ -71,11 +82,20 @@ html, body {
     font-size: 20px;
 }
 
-/* Add task section */
+/* Task section */
+
+.task {
+    padding: 15px 0;
+    border: 1px solid #000000;
+    margin-top: 2px;
+}
 
 .task-add {
     padding: 15px;
     background-color: #d1d1d1;
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
+    border-bottom: 1px solid #000000;
 }
 
 .task-add .fa-plus {
@@ -86,13 +106,6 @@ html, body {
 .task-add .input-group-text {
     cursor: pointer;
     background-color: #72A98B;
-}
-
-/* Task section */
-
-.task {
-    padding: 15px 0;
-    border-top: 1px solid #000000;
 }
 
 .task p, .task .fa-plus-square, .task .fa-window-close, .task .fa-pencil-alt, .task .fa-sort, .task .fa-trash-alt {
