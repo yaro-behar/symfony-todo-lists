@@ -101,4 +101,30 @@ class TaskController extends AbstractController
 
         return new JsonResponse(null, Response::HTTP_OK);
     }
+
+    /**
+     * @Route("/task/reorder", name="task-reorder", methods={"POST"})
+     */
+    public function reorder(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+
+        $tasks = array_flip(explode(',', $request->request->get('task_order')));
+
+        $prioritizedTasks = [];
+        $i = 0;
+        foreach ($tasks as $key => $value) {
+            $prioritizedTasks[(int)$key] = count($tasks) - $i;
+            $i++;
+        }
+        unset($tasks);
+
+        $tasks = $manager->getRepository(Task::class)->findBy(['project' => $request->request->get('project_id')]);
+        foreach ($tasks as $task) {
+            $task->setPriority($prioritizedTasks[$task->getId()]);
+        }
+        $manager->flush();
+
+        return new JsonResponse(null, Response::HTTP_OK);
+    }
 }

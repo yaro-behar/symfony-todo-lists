@@ -93,7 +93,20 @@
             // Sort Tasks
             $('.sortable').each(function(){
                 $(this).sortable({
-                    axis: 'y'
+                    axis: 'y',
+                    update: function(event, ui){
+                        var id = $(this).closest('.project').data('id');
+                        var data = $(this).sortable('toArray', {attribute: 'data-id'}).join(',');
+                        $.ajax({
+                            url: '/task/reorder',
+                            method: 'POST',
+                            dataType: 'json',
+                            data: {project_id: id, task_order: data},
+                            error: function(jqXHR, textStatus, errorThrown){
+                                alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
+                            }
+                        });
+                    }
                 });
             });
 
@@ -118,7 +131,20 @@
                         var id = $(response).filter('.project').attr('data-id');
                         $("#projects").append(response);
                         $('.project[data-id="'+id+'"] .sortable').sortable({
-                            axis: 'y'
+                            axis: 'y',
+                            update: function(event, ui){
+                                var id = $(this).closest('.project').data('id');
+                                var data = $(this).sortable('toArray', {attribute: 'data-id'}).join(',');
+                                $.ajax({
+                                    url: '/task/reorder',
+                                    method: 'POST',
+                                    dataType: 'json',
+                                    data: {project_id: id, task_order: data},
+                                    error: function(jqXHR, textStatus, errorThrown){
+                                        alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
+                                    }
+                                });
+                            }
                         });
                     },
                     error: function(jqXHR, textStatus, errorThrown){
@@ -144,7 +170,6 @@
                             $('input[data-target="'+picker+'"]').datepicker({
                                 dateFormat: 'yy-mm-dd'
                             });
-                            $('.project[data-id="'+id+'"] .sortable').sortable('refresh');
                         },
                         error: function(jqXHR, textStatus, errorThrown){
                             alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
