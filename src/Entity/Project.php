@@ -31,6 +31,7 @@ class Project
 
     /**
      * @ORM\OneToMany(targetEntity="Task", mappedBy="project")
+     * @ORM\OrderBy({"priority" = "DESC"})
      */
     private $tasks;
 
