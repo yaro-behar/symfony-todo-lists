@@ -108,6 +108,13 @@
                         });
                     }
                 });
+
+                $(this).children('.task').each(function(){
+                    if($(this).children('.fa-sort').hasClass('disabled')){
+                        var id = $(this).attr('data-id');
+                        $(this).parent().sortable('option', 'cancel', '.task[data-id="'+id+'"]');
+                    }
+                });
             });
 
             // Сhoose Deadline
@@ -321,6 +328,7 @@
                         elem.find('input[data-target^="picker"]').remove();
                         elem.find('.fa-plus-square').remove();
                         elem.find('.fa-window-close').remove();
+                        elem.parent().sortable('option', 'cancel', '.task[data-id="'+id+'"]');
                     },
                     error: function(jqXHR, textStatus, errorThrown){
                         alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
