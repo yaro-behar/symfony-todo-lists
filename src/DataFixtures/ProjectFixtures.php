@@ -24,7 +24,7 @@ class ProjectFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < count($users); $i++) {
             for ($j = 1; $j <= self::USER_PROJECTS_NUMBER; $j++) {
                 $project = new Project();
-                $project->setName("Project #{$j}");
+                $project->setName("Project {$j}");
                 $project->setUser($users[$i]);
                 $manager->persist($project);
             }

@@ -92,8 +92,20 @@
         $(function(){
             // Sort Tasks
             $('.sortable').each(function(){
+                var ids = [];
+                $(this).children('.task').each(function(){
+                    if($(this).children('.fa-sort').hasClass('disabled')){
+                        ids.push($(this).attr('data-id'));
+                    }
+                });
+                var cancelled = 'input';
+                $.each(ids, function(index,value){
+                    cancelled += ',.task[data-id="'+value+'"]';
+                });
                 $(this).sortable({
                     axis: 'y',
+                    items: '.task',
+                    cancel: cancelled,
                     update: function(event, ui){
                         var id = $(this).closest('.project').data('id');
                         var data = $(this).sortable('toArray', {attribute: 'data-id'}).join(',');
@@ -106,13 +118,6 @@
                                 alert(textStatus.charAt(0).toUpperCase()+textStatus.slice(1)+': '+errorThrown);
                             }
                         });
-                    }
-                });
-
-                $(this).children('.task').each(function(){
-                    if($(this).children('.fa-sort').hasClass('disabled')){
-                        var id = $(this).attr('data-id');
-                        $(this).parent().sortable('option', 'cancel', '.task[data-id="'+id+'"]');
                     }
                 });
             });
@@ -139,6 +144,7 @@
                         $("#projects").append(response);
                         $('.project[data-id="'+id+'"] .sortable').sortable({
                             axis: 'y',
+                            items: '.task',
                             update: function(event, ui){
                                 var id = $(this).closest('.project').data('id');
                                 var data = $(this).sortable('toArray', {attribute: 'data-id'}).join(',');
@@ -164,7 +170,7 @@
             $(document).on('click', '.task-add span', function(){
                 var id = $(this).closest('.project').data('id');
                 var value = $(this).parent().prev().val();
-                if(value){
+                if(isNameValid(value)){
                     $.ajax({
                         url: '/task/create',
                         method: 'POST',
@@ -183,9 +189,7 @@
                         }
                     });
                     $(this).parent().prev().val('');
-                    return;
                 }
-                alert('Please enter a task name!');
             });
 
             // Delete Project or Task
@@ -223,7 +227,7 @@
                 var id = $(this).closest('.project').data('id');
                 var value = $(this).siblings('input[data-target="input"]').val();
                 var elem = $(this).siblings('p');
-                if(value){
+                if(isNameValid(value)){
                     $.ajax({
                         url: '/project/update',
                         method: 'POST',
@@ -242,9 +246,7 @@
                     $(this).hide();
                     $(this).siblings('p').show();
                     $(this).siblings('.fa-pencil-alt').show();
-                    return;
                 }
-                alert('Please enter a project name!');
             });
 
             $(document).on('click', '.fa-plus-square[data-entity="task"]', function(){
@@ -256,6 +258,9 @@
                 var status = true; // Status Active
                 if(!value && !deadline){
                     alert('Please enter a task name or a deadline!');
+                    return;
+                }
+                if(value && !isNameValid(value)){
                     return;
                 }
                 if(deadline){
@@ -345,6 +350,18 @@
                 var month = String(date.getMonth() + 1).padStart(2, '0');
                 var day = String(date.getDate()).padStart(2, '0');
                 return [year, month, day].join('-');
+            }
+
+            function isNameValid(name){
+                if(name.trim() === ''){
+                    alert('Please enter a name!');
+                    return false;
+                }
+                if(!(/^[A-Za-z0-9]+$/i.test(name)) || /<\/?[a-z][\s\S]*>/i.test(name)){
+                    alert('Please enter a valid name!');
+                    return false;
+                }
+                return true;
             }
         });
     </script>
