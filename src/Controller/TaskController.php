@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Entity\Project;
 use App\Entity\Task;
 
@@ -15,7 +16,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/task/create", name="task-create", methods={"POST"})
      */
-    public function create(Request $request)
+    public function create(Request $request, ValidatorInterface $validator)
     {
         $manager = $this->getDoctrine()->getManager();
 
@@ -27,6 +28,11 @@ class TaskController extends AbstractController
         $task = new Task();
         $task->setName($request->request->get('task_name'));
         $task->setProject($project);
+
+        $errors = $validator->validate($task);
+        if (count($errors) > 0) {
+            throw new \UnexpectedValueException((string)$errors);
+        }
 
         $manager->persist($task);
         $manager->flush();
@@ -119,8 +125,16 @@ class TaskController extends AbstractController
         }
         unset($tasks);
 
-        $tasks = $manager->getRepository(Task::class)->findBy(['project' => $request->request->get('project_id')]);
+        $project = $manager->getRepository(Project::class)->find($request->request->get('project_id'));
+        if (!$project) {
+            throw $this->createNotFoundException('No project found for id ' . $request->request->get('project_id'));
+        }
+
+        $tasks = $manager->getRepository(Task::class)->findBy(['project' => $project]);
         foreach ($tasks as $task) {
+            if (!isset($prioritizedTasks[$task->getId()])) {
+                throw $this->createNotFoundException('No task found in order ' . $request->request->get('task_order'));
+            }
             $task->setPriority($prioritizedTasks[$task->getId()]);
         }
         $manager->flush();

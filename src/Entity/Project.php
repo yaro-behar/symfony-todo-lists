@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
@@ -20,6 +21,17 @@ class Project
 
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
+     * @Assert\NotBlank
+     * @Assert\Regex(
+     *     pattern = "/^[A-Za-z0-9]+$/i",
+     *     match = true,
+     *     htmlPattern = false
+     * )
+     * @Assert\Regex(
+     *     pattern = "/<\/?[a-z][\s\S]*>/i",
+     *     match = false,
+     *     htmlPattern = false
+     * )
      */
     private $name;
 

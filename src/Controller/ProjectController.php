@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Entity\Project;
 
 class ProjectController extends AbstractController
@@ -42,7 +43,7 @@ class ProjectController extends AbstractController
     /**
      * @Route("/project/update", name="project-update", methods={"POST"})
      */
-    public function update(Request $request)
+    public function update(Request $request, ValidatorInterface $validator)
     {
         $manager = $this->getDoctrine()->getManager();
 
@@ -52,6 +53,12 @@ class ProjectController extends AbstractController
         }
 
         $project->setName($request->request->get('project_name'));
+
+        $errors = $validator->validate($project);
+        if (count($errors) > 0) {
+            throw new \UnexpectedValueException((string)$errors);
+        }
+
         $manager->flush();
 
         return new JsonResponse(null, Response::HTTP_OK);

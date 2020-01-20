@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TaskRepository")
@@ -22,6 +23,17 @@ class Task
 
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
+     * @Assert\NotBlank
+     * @Assert\Regex(
+     *     pattern = "/^[A-Za-z0-9]+$/i",
+     *     match = true,
+     *     htmlPattern = false
+     * )
+     * @Assert\Regex(
+     *     pattern = "/<\/?[a-z][\s\S]*>/i",
+     *     match = false,
+     *     htmlPattern = false
+     * )
      */
     private $name;
 
