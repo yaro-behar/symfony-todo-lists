@@ -47,7 +47,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/task/update", name="task-update", methods={"POST"})
      */
-    public function update(Request $request)
+    public function update(Request $request, ValidatorInterface $validator)
     {
         $manager = $this->getDoctrine()->getManager();
 
@@ -59,14 +59,21 @@ class TaskController extends AbstractController
         if (!$task->isStatusActive()) {
             return new JsonResponse(['status' => 'inactive'], Response::HTTP_OK);
         }
-
         if (!empty($request->request->get('task_name'))) {
             $task->setName($request->request->get('task_name'));
         }
         if (!empty($request->request->get('task_deadline'))) {
             $deadline = \DateTime::createFromFormat('Y-m-d', $request->request->get('task_deadline'));
-            $task->setDeadline($deadline);
+            if ($deadline !== false) {
+                $task->setDeadline($deadline);
+            }
         }
+
+        $errors = $validator->validate($task);
+        if (count($errors) > 0) {
+            throw new \UnexpectedValueException((string)$errors);
+        }
+
         $manager->flush();
 
         return new JsonResponse(['status' => 'active'], Response::HTTP_OK);
