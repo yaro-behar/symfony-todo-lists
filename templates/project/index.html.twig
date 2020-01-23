@@ -357,7 +357,7 @@
                     alert('Please enter a name!');
                     return false;
                 }
-                if(!(/^[A-Za-z0-9]+$/i.test(name)) || /<\/?[a-z][\s\S]*>/i.test(name)){
+                if(!(/^[A-Za-z0-9_ -]+$/i.test(name)) || /<\/?[a-z][\s\S]*>/i.test(name)){
                     alert('Please enter a valid name!');
                     return false;
                 }

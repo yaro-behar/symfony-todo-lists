@@ -23,7 +23,7 @@ class Project
      * @ORM\Column(type="string", length=50, nullable=false)
      * @Assert\NotBlank
      * @Assert\Regex(
-     *     pattern = "/^[A-Za-z0-9]+$/i",
+     *     pattern = "/^[A-Za-z0-9_ -]+$/i",
      *     match = true,
      *     htmlPattern = false
      * )
