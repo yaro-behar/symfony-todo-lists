@@ -3,26 +3,26 @@
 namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use App\Entity\Project;
 
 class ProjectControllerTest extends WebTestCase
 {
     /**
-     * @dataProvider provideUrls
+     * @dataProvider getUrlsForUnauthorizedUsers
      */
     public function testRedirectForUnauthorizedUsers(string $url)
     {
         $client = self::createClient();
 
-        $client->request('GET', $url);
+        $client->followRedirects();
 
-        while ($client->getResponse()->isRedirection()) {
-            $client->followRedirect();
-        }
+        $client->request('GET', $url);
 
         $this->assertContains('Please sign in', $client->getResponse()->getContent());
     }
 
-    public function provideUrls()
+    public function getUrlsForUnauthorizedUsers()
     {
         return [
             ['/'],
@@ -30,20 +30,48 @@ class ProjectControllerTest extends WebTestCase
         ];
     }
 
-    public function testShowProjectList()
+    public function testShowProjects()
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/login');
+        $client->request('GET', '/login');
 
-        $form = $crawler->selectButton('Login')->form();
+        $this->login($client);
+
+        $this->assertContains('SIMPLE TODO LISTS', $client->getResponse()->getContent());
+    }
+
+    public function testCreateProject()
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/login');
+
+        $this->login($client);
+
+        $projectRepository  = $client->getContainer()->get('doctrine')->getRepository(Project::class);
+
+        $projectsBeforeInsert = $projectRepository->count([]);
+
+        $client->xmlHttpRequest('GET', '/project/create');
+
+        $projectsAfterInsert = $projectRepository->count([]);
+
+        $this->assertEquals($projectsBeforeInsert + 1, $projectsAfterInsert);
+    }
+
+    public function testDeleteProject()
+    {
+
+    }
+
+    private function login(KernelBrowser $client)
+    {
+        $form = $client->getCrawler()->selectButton('Login')->form();
         $form['_username'] = 'user1@domain.com';
         $form['_password'] = 'qwerty';
 
         $client->submit($form);
-
         $client->getResponse()->isRedirection() && $client->followRedirect();
-
-        $this->assertContains('SIMPLE TODO LISTS', $client->getResponse()->getContent());
     }
 }
