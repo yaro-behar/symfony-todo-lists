@@ -67,6 +67,61 @@ class ProjectControllerTest extends WebTestCase
         // TODO: implement
     }
 
+
+    public function testUpdateNonExistentProject()
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/login');
+
+        $this->login($client);
+
+        /** @var QueryBuilder $queryBuilder */
+        $queryBuilder = $client->getContainer()
+            ->get('doctrine')
+            ->getRepository(Project::class)
+            ->createQueryBuilder('p');
+        $ids = array_column($queryBuilder->select('p.id')->getQuery()->getArrayResult(), 'id');
+
+        $nonExistentId = 1;
+        while (in_array($nonExistentId, $ids)) {
+            $nonExistentId++;
+        }
+
+        $client->xmlHttpRequest(
+            'POST',
+            '/project/update/',
+            [
+                'project_id' => $nonExistentId,
+                'project_name' => 'new_name'
+            ]
+        );
+
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $client->getResponse()->getStatusCode());
+    }
+
+    public function testUpdateProjectWithInvalidName()
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/login');
+
+        $this->login($client);
+
+        $projectRepository = $client->getContainer()->get('doctrine')->getRepository(Project::class);
+
+        $client->xmlHttpRequest(
+            'POST',
+            '/project/update',
+            [
+                'project_id' => $projectRepository->findOneBy([])->getId(),
+                'project_name' => '%!!$invalid_name$!!%'
+            ]
+        );
+
+        $this->assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $client->getResponse()->getStatusCode());
+    }
+
     public function testDeleteProject()
     {
         $client = static::createClient();
