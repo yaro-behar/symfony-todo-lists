@@ -64,9 +64,29 @@ class ProjectControllerTest extends WebTestCase
 
     public function testUpdateProject()
     {
-        // TODO: implement
-    }
+        $client = static::createClient();
 
+        $client->request('GET', '/login');
+
+        $this->login($client);
+
+        $projectRepository = $client->getContainer()->get('doctrine')->getRepository(Project::class);
+
+        $id = $projectRepository->findOneBy([])->getId();
+
+        $name = $this->generateRandomString();
+
+        $client->xmlHttpRequest(
+            'POST',
+            '/project/update',
+            [
+                'project_id' => $id,
+                'project_name' => $name
+            ]
+        );
+
+        $this->assertEquals($name, $projectRepository->find($id)->getName());
+    }
 
     public function testUpdateNonExistentProject()
     {
@@ -174,5 +194,18 @@ class ProjectControllerTest extends WebTestCase
 
         $client->submit($form);
         $client->getResponse()->isRedirection() && $client->followRedirect();
+    }
+
+    private function generateRandomString(int $length = 10)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+
+        return $randomString;
     }
 }
